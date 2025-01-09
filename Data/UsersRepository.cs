@@ -17,9 +17,9 @@ class UsersRepository : IUsersRepository
         return _users[id];
     }
 
-    public Users CreateUser(string name)
+    public Users CreateUser(string name, string password)
     {
-        Users user = new Users(name);
+        Users user = new Users(name, password);
         _users.Add(user.Id, user);
         return user;
     }

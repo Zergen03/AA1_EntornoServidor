@@ -50,7 +50,24 @@ public class Menu
     {
         Console.WriteLine("Enter your name");
         string name = Console.ReadLine();
-        Users user = _usersRepository.CreateUser(name);
-        Console.WriteLine(user.ToString());
+        if(string.IsNullOrEmpty(name))
+        {
+            Console.WriteLine("Invalid name");
+            return;
+        }
+        Console.WriteLine("Enter your password");
+        string password = Console.ReadLine();
+        if(string.IsNullOrEmpty(password))
+        {
+            Console.WriteLine("Invalid password");
+            return;
+        }
+
+        try{
+            Users user = _usersService.Login(name, password);
+        }catch(System.Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 }

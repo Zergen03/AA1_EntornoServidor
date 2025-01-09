@@ -10,9 +10,18 @@ public class UsersService : IUsersService
     {
         _repository = repository;
     }
+
+    public Users Login(string name, string password)
+    {
+        Users? user = _repository.GetUsers().Find(u => u.Name == name && u.password == password);
+        if(user == null)
+        {
+            throw new System.Exception("User or password incorrect");
+        }
+        return user;
+    }
     public Users AddTask(int id, AA1.Models.Task task)
     {
-        if (!_repository.UserExists(id)) { throw new Exception("User not found"); }
         _repository.GetUserById(id).tasks.Add(task);
         return _repository.GetUserById(id);
     }
