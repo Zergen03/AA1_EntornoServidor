@@ -27,46 +27,49 @@ public class UsersService : IUsersService
     }
     public Users DeleteTask(int id, int taskId)
     {
-        throw new System.NotImplementedException();
-    }
-    public Users CompleteTask(int userId, int taskId)
-    {
-        throw new System.NotImplementedException();
-    }
-    public Users AddItem(int id, Items item)
-    {
-        throw new System.NotImplementedException();
-    }
-    public Users DeleteItem(int id, int itemId)
-    {
-        throw new System.NotImplementedException();
+        _repository.GetUserById(id).tasks.RemoveAll(t => t.Id == taskId);
+        return _repository.GetUserById(id);
     }
     public List<Items> GetInventory(int id)
     {
-        throw new System.NotImplementedException();
+        return _repository.GetUserById(id).items;
     }
     public List<Items> GetEquippedItems(int id)
     {
-        throw new System.NotImplementedException();
+        return _repository.GetUserById(id).equippedItems;
     }
     public Users EquipItem(int id, int itemId)
     {
-        throw new System.NotImplementedException();
+        Users user = _repository.GetUserById(id);
+        Items item = user.items.Find(i => i.Id == itemId);
+        user.equippedItems.Add(item);
+        user.items.Remove(item);
+        return user;
     }
     public Users UnEquipItem(int id, int itemId)
     {
-        throw new System.NotImplementedException();
+        Users user = _repository.GetUserById(id);
+        Items item = user.equippedItems.Find(i => i.Id == itemId);
+        user.items.Add(item);
+        user.equippedItems.Remove(item);
+        return user;
     }
     public Users TakeDamage(int id, int damage)
     {
-        throw new System.NotImplementedException();
+        Users user = _repository.GetUserById(id);
+        user.life -= damage;
+        return user;
     }
     public Users Heal(int id, int heal)
     {
-        throw new System.NotImplementedException();
+        Users user = _repository.GetUserById(id);
+        user.life += heal;
+        return user;
     }
     public Users levelUp(int id)
     {
-        throw new System.NotImplementedException();
+        Users user = _repository.GetUserById(id);
+        user.level++;
+        return user;
     }
 }
