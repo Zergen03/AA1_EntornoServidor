@@ -9,7 +9,9 @@ public class Task{
     public int Gold { get; set; }
     public int difficulty { get; set; }
     public int lostLife { get; set; }
-    public DateTime? lostTime { get; set; }
+    public DateTime? ExpirationDate { get; set; }
+    public bool Completed { get; set; }
+    public bool Expired { get; set; }
 
     public Task(string _title, string _description, int _difficulty, DateTime? _lostTime = null)
     {
@@ -20,8 +22,10 @@ public class Task{
         Gold = CalculateGold();
         lostLife = CalculateLostLife();
         difficulty = _difficulty;
-        lostTime = _lostTime;
+        ExpirationDate = _lostTime;
         IncraseSeed();
+        Completed = false;
+        Expired = false;
     }
 
     private static void IncraseSeed()
@@ -31,7 +35,7 @@ public class Task{
 
     public override string ToString()
     {
-        return $"Title: {Title},\nDescription: {Description},\nXp: {Xp},\nGold: {Gold},\nDifficulty: {difficulty}, LostLife: {lostTime?.ToString() ?? "0"}";   
+        return $"Title: {Title},\nDescription: {Description},\nXp: {Xp},\nGold: {Gold},\nDifficulty: {difficulty}, LostLife: {ExpirationDate?.ToString() ?? "0"}";   
     }
 
     private int CalculateGold()
