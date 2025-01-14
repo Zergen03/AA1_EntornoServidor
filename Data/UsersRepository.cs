@@ -1,4 +1,5 @@
 using AA1.Models;
+using System.Text.Json;
 
 namespace AA1.Data;
 
@@ -6,6 +7,8 @@ class UsersRepository : IUsersRepository
 {
 
     private Dictionary<int, Users> _users = new Dictionary<int, Users>();
+    private readonly string _filePath = Environment.GetEnvironmentVariable("USERS_JSON_PATH") ?? "ddbb/Users.json";
+
 
     public List<Users> GetUsers()
     {
@@ -14,6 +17,9 @@ class UsersRepository : IUsersRepository
 
     public Users GetUserById(int id)
     {
+        if (!_users.ContainsKey(id)){
+            throw new KeyNotFoundException($"Not user found.");
+        }
         return _users[id];
     }
 
@@ -32,14 +38,26 @@ class UsersRepository : IUsersRepository
 
     public Users DeleteUser(int id)
     {
-        throw new System.NotImplementedException();
+        Users user = _users[id];
+        _users.Remove(id);
+        return user;
     }
     public void LoadUsers()
     {
-        throw new System.NotImplementedException();
+        if (!File.Exists(_filePath))
+        {
+            return;
+        }
+        string jsonString = File.ReadAllText(_filePath);
+        var UsersToDeserialize = JsonSerializer.Deserialize<List<Users>>(jsonString);
+        _users = UsersToDeserialize.ToDictionary(u => u.Id);
     }
     public void SaveChanges()
     {
-        throw new System.NotImplementedException();
+        var UsersToSerialize = _users.Values.ToList();
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        string jsonString = JsonSerializer.Serialize(UsersToSerialize, options);
+        File.WriteAllText(_filePath, jsonString);
+
     }
 }
