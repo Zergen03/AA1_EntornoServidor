@@ -12,3 +12,8 @@ c:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\obj\Debug\net8.0\refint
 c:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\obj\Debug\net8.0\AA1.pdb
 c:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\obj\Debug\net8.0\AA1.genruntimeconfig.cache
 c:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\obj\Debug\net8.0\ref\AA1.dll
+C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\obj\Debug\net8.0\AA1.csproj.AssemblyReference.cache
+C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\obj\Debug\net8.0\AA1.sourcelink.json
+C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\obj\Debug\net8.0\AA1.csproj.Up2Date
