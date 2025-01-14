@@ -38,6 +38,6 @@ public class Items{
 
     public override string ToString()
     {
-        return $"Name: {Name},\nValue: {Value},\nStats: {Stats}";   
+        return $"Name: {Name},\nValue: {Value},\n{Stats}";   
     }
 }
