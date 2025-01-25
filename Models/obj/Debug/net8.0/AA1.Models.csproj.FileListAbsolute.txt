@@ -1,0 +1,10 @@
+C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\Models\bin\Debug\net8.0\AA1.Models.deps.json
+C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\Models\bin\Debug\net8.0\AA1.Models.dll
+C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\Models\bin\Debug\net8.0\AA1.Models.pdb
+C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\Models\obj\Debug\net8.0\AA1.Models.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\Models\obj\Debug\net8.0\AA1.Models.csproj.CoreCompileInputs.cache
+C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\Models\obj\Debug\net8.0\AA1.Models.sourcelink.json
+C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\Models\obj\Debug\net8.0\AA1.Models.dll
+C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\Models\obj\Debug\net8.0\refint\AA1.Models.dll
+C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\Models\obj\Debug\net8.0\AA1.Models.pdb
+C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\Models\obj\Debug\net8.0\ref\AA1.Models.dll

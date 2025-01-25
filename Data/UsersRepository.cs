@@ -24,15 +24,21 @@ class UsersRepository : IUsersRepository
     {
         if (!_users.ContainsKey(id))
         {
-            throw new KeyNotFoundException($"Not user found.");
+            throw new KeyNotFoundException("Not user found");
         }
         return _users[id];
     }
 
-    public Users CreateUser(string name, string password)
+    public Users GetUserByName(string name)
     {
-        Users user = new Users(name, password);
+        Users user = _users.Values.FirstOrDefault(u => u.Name == name);
+        return user;
+    }
+
+    public Users CreateUser(Users user)
+    {   
         _users.Add(user.Id, user);
+        SaveChanges();
         return user;
     }
 
@@ -57,8 +63,15 @@ class UsersRepository : IUsersRepository
                 return;
             }
             string jsonString = File.ReadAllText(_filePath);
-            var UsersToDeserialize = JsonSerializer.Deserialize<List<Users>>(jsonString);
-            _users = UsersToDeserialize.ToDictionary(u => u.Id);
+            if (string.IsNullOrEmpty(jsonString))
+            {
+                return;
+            }
+            var UsersToDeserialize = JsonSerializer.Deserialize<List<AA1.Models.Users>>(jsonString);
+            if (UsersToDeserialize != null)
+            {
+                _users = UsersToDeserialize.ToDictionary(u => u.Id);
+            }
         }
         catch (Exception ex)
         {

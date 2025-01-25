@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {}
+    "net8.0": {
+      "AA1.Models/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/AA1.Models.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/AA1.Models.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "AA1.Models/1.0.0": {
+      "type": "project",
+      "path": "../Models/AA1.Models.csproj",
+      "msbuildProject": "../Models/AA1.Models.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net8.0": []
+    "net8.0": [
+      "AA1.Models >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\alexi\\.nuget\\packages\\": {}
@@ -13,9 +32,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Data\\AA1.csproj",
-      "projectName": "AA1",
-      "projectPath": "C:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Data\\AA1.csproj",
+      "projectUniqueName": "C:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Data\\AA1.Data.csproj",
+      "projectName": "AA1.Data",
+      "projectPath": "C:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Data\\AA1.Data.csproj",
       "packagesPath": "C:\\Users\\alexi\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Data\\obj\\",
       "projectStyle": "PackageReference",
@@ -31,7 +50,11 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Models\\AA1.Models.csproj": {
+              "projectPath": "C:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Models\\AA1.Models.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
