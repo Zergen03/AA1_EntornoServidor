@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Data\\AA1.Data.csproj": {}
+    "C:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Data\\AA1.Data.csproj": {}
   },
   "projects": {
-    "c:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Data\\AA1.Data.csproj": {
+    "C:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Data\\AA1.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Data\\AA1.Data.csproj",
+        "projectUniqueName": "C:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Data\\AA1.Data.csproj",
         "projectName": "AA1.Data",
-        "projectPath": "c:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Data\\AA1.Data.csproj",
+        "projectPath": "C:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Data\\AA1.Data.csproj",
         "packagesPath": "C:\\Users\\alexi\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Data\\obj\\",
+        "outputPath": "C:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Data\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\alexi\\AppData\\Roaming\\NuGet\\NuGet.Config"

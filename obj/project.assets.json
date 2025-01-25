@@ -165,11 +165,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\AA1.csproj",
+      "projectUniqueName": "C:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\AA1.csproj",
       "projectName": "AA1",
-      "projectPath": "c:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\AA1.csproj",
+      "projectPath": "C:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\AA1.csproj",
       "packagesPath": "C:\\Users\\alexi\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\obj\\",
+      "outputPath": "C:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\alexi\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -184,8 +184,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "c:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Services\\AA1.Services.csproj": {
-              "projectPath": "c:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Services\\AA1.Services.csproj"
+            "C:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Services\\AA1.Services.csproj": {
+              "projectPath": "C:\\Users\\alexi\\Documents\\GitHub\\DAWO_EntornoServidor\\AA1\\Services\\AA1.Services.csproj"
             }
           }
         }
