@@ -7,8 +7,13 @@ class UsersRepository : IUsersRepository
 {
 
     private Dictionary<int, Users> _users = new Dictionary<int, Users>();
-    private readonly string _filePath = Environment.GetEnvironmentVariable("USERS_JSON_PATH") ?? "ddbb/Users.json";
+    private readonly string _filePath = Environment.GetEnvironmentVariable("USERS_JSON_PATH") ?? "../../../ddbb/Users.json";
 
+
+    public UsersRepository()
+    {
+        LoadUsers();
+    }
 
     public List<Users> GetUsers()
     {
@@ -17,7 +22,8 @@ class UsersRepository : IUsersRepository
 
     public Users GetUserById(int id)
     {
-        if (!_users.ContainsKey(id)){
+        if (!_users.ContainsKey(id))
+        {
             throw new KeyNotFoundException($"Not user found.");
         }
         return _users[id];
@@ -44,13 +50,20 @@ class UsersRepository : IUsersRepository
     }
     public void LoadUsers()
     {
-        if (!File.Exists(_filePath))
+        try
         {
-            return;
+            if (!File.Exists(_filePath))
+            {
+                return;
+            }
+            string jsonString = File.ReadAllText(_filePath);
+            var UsersToDeserialize = JsonSerializer.Deserialize<List<Users>>(jsonString);
+            _users = UsersToDeserialize.ToDictionary(u => u.Id);
         }
-        string jsonString = File.ReadAllText(_filePath);
-        var UsersToDeserialize = JsonSerializer.Deserialize<List<Users>>(jsonString);
-        _users = UsersToDeserialize.ToDictionary(u => u.Id);
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred while loading users: {ex.Message}");
+        }
     }
     public void SaveChanges()
     {

@@ -25,6 +25,11 @@ public class Users
         IncraseSeed();
     }
 
+    public Users(){
+        Id = _seed;
+        IncraseSeed();
+    }
+
     private static void IncraseSeed()
     {
         _seed++;

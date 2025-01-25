@@ -11,4 +11,10 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="Data\AA1.csproj" />
+    <ProjectReference Include="Services\AA1.csproj" />
+    <ProjectReference Include="Models\AA1.csproj" />
+  </ItemGroup>
+
 </Project>
