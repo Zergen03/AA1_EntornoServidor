@@ -1,12 +1,17 @@
 ﻿using AA1.Models;
 using AA1.Data;
 using AA1.Services;
+using AA1.Menu;
 using Microsoft.Extensions.DependencyInjection;
 
 
 var services = new ServiceCollection();
 services.AddSingleton<IUsersRepository, UsersRepository>();
 services.AddTransient<IUsersService, UsersService>();
+services.AddSingleton<IItemsRepository, ItemsRepository>();
+services.AddTransient<IItemsService, ItemsService>();
+services.AddSingleton<ITaskRepository, TaskRepository>();
+services.AddTransient<ITaskService, TaskService>();
 services.AddSingleton<Menu>();
 
 var serviceProvider = services.BuildServiceProvider();
