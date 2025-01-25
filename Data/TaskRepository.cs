@@ -6,7 +6,7 @@ namespace AA1.Data;
 public class TaskRepository : ITaskRepository
 {
     private Dictionary<int, AA1.Models.Task> _tasks = new Dictionary<int, AA1.Models.Task>();
-    private readonly string _filePath = Environment.GetEnvironmentVariable("USERS_JSON_PATH") ?? "ddbb/Task.json";
+    private readonly string _filePath = Environment.GetEnvironmentVariable("USERS_JSON_PATH") ?? "../../../ddbb/Task.json";
 
     public List<AA1.Models.Task> GetTasks()
     {
