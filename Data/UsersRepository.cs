@@ -7,8 +7,13 @@ class UsersRepository : IUsersRepository
 {
 
     private Dictionary<int, Users> _users = new Dictionary<int, Users>();
-    private readonly string _filePath = Environment.GetEnvironmentVariable("USERS_JSON_PATH") ?? "ddbb/Users.json";
+    private readonly string _filePath = Environment.GetEnvironmentVariable("USERS_JSON_PATH") ?? "../../../ddbb/Users.json";
 
+
+    public UsersRepository()
+    {
+        LoadUsers();
+    }
 
     public List<Users> GetUsers()
     {
@@ -17,16 +22,23 @@ class UsersRepository : IUsersRepository
 
     public Users GetUserById(int id)
     {
-        if (!_users.ContainsKey(id)){
-            throw new KeyNotFoundException($"Not user found.");
+        if (!_users.ContainsKey(id))
+        {
+            throw new KeyNotFoundException("Not user found");
         }
         return _users[id];
     }
 
-    public Users CreateUser(string name, string password)
+    public Users GetUserByName(string name)
     {
-        Users user = new Users(name, password);
+        Users user = _users.Values.FirstOrDefault(u => u.Name == name);
+        return user;
+    }
+
+    public Users CreateUser(Users user)
+    {   
         _users.Add(user.Id, user);
+        SaveChanges();
         return user;
     }
 
@@ -44,13 +56,27 @@ class UsersRepository : IUsersRepository
     }
     public void LoadUsers()
     {
-        if (!File.Exists(_filePath))
+        try
         {
-            return;
+            if (!File.Exists(_filePath))
+            {
+                return;
+            }
+            string jsonString = File.ReadAllText(_filePath);
+            if (string.IsNullOrEmpty(jsonString))
+            {
+                return;
+            }
+            var UsersToDeserialize = JsonSerializer.Deserialize<List<AA1.Models.Users>>(jsonString);
+            if (UsersToDeserialize != null)
+            {
+                _users = UsersToDeserialize.ToDictionary(u => u.Id);
+            }
         }
-        string jsonString = File.ReadAllText(_filePath);
-        var UsersToDeserialize = JsonSerializer.Deserialize<List<Users>>(jsonString);
-        _users = UsersToDeserialize.ToDictionary(u => u.Id);
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred while loading users: {ex.Message}");
+        }
     }
     public void SaveChanges()
     {

@@ -1,0 +1,4 @@
+bin/
+obj/
+ddbb/*
+!ddbb/.gitkeep

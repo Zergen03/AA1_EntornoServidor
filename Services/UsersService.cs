@@ -11,14 +11,28 @@ public class UsersService : IUsersService
         _repository = repository;
     }
 
-    public Users Login(string name, string password)
+    public Users Login(string _name, string _password)
     {
-        Users? user = _repository.GetUsers().Find(u => u.Name == name && u.password == password);
-        if(user == null)
+        Users? user = _repository.GetUserByName(_name);
+        if (user == null || user.password != _password)
         {
             throw new System.Exception("User or password incorrect");
         }
         return user;
+    }
+
+    public Users Register(string _name, string _password)
+    {
+        if (_repository.GetUserByName(_name) == null)
+        {
+            Users user = new Users(_name, _password);
+            _repository.CreateUser(user);
+        }else{
+            if(_name != "admin"){
+                throw new System.Exception("User already exists");
+            }
+        }
+        return Login(_name, _password);
     }
     public Users AddTask(int id, AA1.Models.Task task)
     {

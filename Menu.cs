@@ -114,13 +114,13 @@ public class Menu
             return;
         }
 
-        try{
-            Users user = _usersRepository.CreateUser(name, password);
-            _usersRepository.SaveChanges();
-        }catch(System.Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
+        // try{
+        //     Users user = _usersRepository.CreateUser(name, password);
+        //     _usersRepository.SaveChanges();
+        // }catch(System.Exception ex)
+        // {
+        //     Console.WriteLine(ex.Message);
+        // }
     }
 
     private void MenuUser(Users user)

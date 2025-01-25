@@ -5,6 +5,7 @@ namespace AA1.Services;
 public interface IUsersService
 {
     Users Login(string name, string password);
+    Users Register(string name, string password);
     Users AddTask(int id, AA1.Models.Task task);
     Users DeleteTask(int id, int taskId);
     List<Items> GetInventory(int id);
