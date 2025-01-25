@@ -2,18 +2,21 @@ using AA1.Models;
 using AA1.Data;
 using AA1.Services;
 
+namespace AA1.Menu;
 public class Menu
 {
 
     private readonly IUsersRepository _usersRepository;
     private readonly IUsersService _usersService;
-    // private readonly ITaskRepository _taskRepository;
-    // private readonly ITaskService _taskService;    
+    private readonly IItemsService _itemsService;
+    private readonly ITaskService _taskService;     
 
-    public Menu(IUsersRepository usersRepository, IUsersService usersService)
+    public Menu(IUsersRepository usersRepository, IUsersService usersService, IItemsService itemsService, ITaskService taskService)
     {
         _usersRepository = usersRepository;
         _usersService = usersService;
+        _itemsService = itemsService;
+        _taskService = taskService;
     }
 
 
@@ -34,10 +37,9 @@ public class Menu
 
         private void InventoryMenu()
     {
-        Console.WriteLine("1) Add item");
-        Console.WriteLine("2) Delete item");
-        Console.WriteLine("3) Equip item");
-        Console.WriteLine("4) Unequip item");
+        Console.WriteLine("1) Show inventory");
+        Console.WriteLine("2) Equip item");
+        Console.WriteLine("3) Unequip item");
         Console.WriteLine("0) Exit");
     }
 
@@ -59,9 +61,6 @@ public class Menu
                     break;
                 case 2:
                     Register();
-                    break;
-                case 0:
-                    Console.WriteLine("Exit");
                     break;
                 default:
                     Console.WriteLine("Invalid option");
@@ -93,7 +92,7 @@ public class Menu
         }catch(System.Exception ex)
         {
             Console.WriteLine(ex.Message);
-            Login();
+            ShowMenu();
         }
     }
 
@@ -113,14 +112,6 @@ public class Menu
             Console.WriteLine("Invalid password");
             return;
         }
-
-        // try{
-        //     Users user = _usersRepository.CreateUser(name, password);
-        //     _usersRepository.SaveChanges();
-        // }catch(System.Exception ex)
-        // {
-        //     Console.WriteLine(ex.Message);
-        // }
     }
 
     private void MenuUser(Users user)
@@ -140,7 +131,7 @@ public class Menu
                     InventoryMenu(user);
                     break;
                 case 2:
-                    Console.WriteLine("Tasks");
+                    TaskMenu(user);
                     break;
                 case 3:
                     Console.WriteLine("Stats");
@@ -169,19 +160,55 @@ public class Menu
             switch (option)
             {
                 case 1:
-                    // Console.WriteLine("Add item");
+                    Console.WriteLine("Unequiped items:");
+                    _usersService.GetInventory(user.Id);
+                    Console.WriteLine("Equiped items:");
+                    _usersService.GetEquippedItems(user.Id);
                     break;
                 case 2:
-                    // Console.WriteLine("Delete item");
+                    _usersService.EquipItem(user.Id, 1);
                     break;
                 case 3:
-                    Console.WriteLine("Equip item");
-                    break;
-                case 4:
                     Console.WriteLine("Unequip item");
                     break;
-                case 0:
-                    Console.WriteLine("Exit");
+                default:
+                    Console.WriteLine("Invalid option");
+                    break;
+            }
+        } while (int.TryParse(Console.ReadLine(), out option) && option != 0);
+    }
+
+    private void TaskMenu(Users user){
+        int option;
+        do
+        {
+            Console.WriteLine("1) Show tasks");
+            Console.WriteLine("2) Add task");
+            Console.WriteLine("3) Delete task");
+            Console.WriteLine("4) Complete task");
+            Console.WriteLine("0) Exit");
+            if (!int.TryParse(Console.ReadLine(), out option))
+            {
+                Console.WriteLine("Invalid option");
+            }
+
+            switch (option)
+            {
+                case 1:
+                    Console.WriteLine("Tasks:\n-------------------");
+                    // _usersService.GetTasks(user.Id);
+                    break;
+                case 2:
+                    Console.WriteLine("Add task");
+                    // _usersService.AddTask(user.Id, new AA1.Models.Task());
+                    break;
+                case 3:
+                    Console.WriteLine("Delete task");
+                    // _usersService.DeleteTask(user.Id, 1);
+                    break;
+                case 4:
+                    Console.WriteLine("Complete task");
+                    // _usersService.CompleteTask(user.Id, 1);
                     break;
                 default:
                     Console.WriteLine("Invalid option");
