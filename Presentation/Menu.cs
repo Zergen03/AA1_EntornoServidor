@@ -123,6 +123,17 @@ public class Menu
             Console.WriteLine("Invalid password");
             return;
         }
+
+        try
+        {
+            Users user = _usersService.Register(name, password);
+            MenuUser(user);
+        }
+        catch (System.Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            MainMenu();
+        }
     }
 
     private void MenuUser(Users user)
@@ -145,7 +156,7 @@ public class Menu
                     TaskMenu(user);
                     break;
                 case 3:
-                    Console.WriteLine("Stats");
+                    user.ToString();
                     break;
                 default:
                     Console.WriteLine("Invalid option");
@@ -157,6 +168,7 @@ public class Menu
     private void InventoryMenu(Users user)
     {
         int option;
+        int itemId;
         do
         {
             ShowInventoryMenu();
@@ -164,20 +176,29 @@ public class Menu
             {
                 Console.WriteLine("Invalid option");
             }
-
             switch (option)
             {
                 case 1:
-                    Console.WriteLine("Unequiped items:");
+                    Console.WriteLine("Unequiped items:\n-------------------");
                     _usersService.GetInventory(user.Id);
-                    Console.WriteLine("Equiped items:");
+                    Console.WriteLine("Equiped items:\n-------------------");
                     _usersService.GetEquippedItems(user.Id);
                     break;
                 case 2:
-                    _usersService.EquipItem(user.Id, 1);
+                    Console.WriteLine("Select item to equip");
+                    if (!int.TryParse(Console.ReadLine(), out itemId))
+                    {
+                        Console.WriteLine("Invalid option");
+                    }
+                    _usersService.EquipItem(user.Id, itemId);
                     break;
                 case 3:
-                    Console.WriteLine("Unequip item");
+                    Console.WriteLine("Select item to unequip");
+                    if (!int.TryParse(Console.ReadLine(), out itemId))
+                    {
+                        Console.WriteLine("Invalid option");
+                    }
+                    _usersService.UnEquipItem(user.Id, itemId);
                     break;
                 default:
                     Console.WriteLine("Invalid option");
