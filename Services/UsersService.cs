@@ -204,6 +204,12 @@ public class UsersService : IUsersService
         user.life += heal;
         return user;
     }
+    public Users GainXp(int id, int xp)
+    {
+        Users user = _repository.GetUserById(id);
+        user.xp += xp;
+        return user;
+    }
     public Users levelUp(int id)
     {
         Users user = _repository.GetUserById(id);
