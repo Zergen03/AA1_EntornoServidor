@@ -156,12 +156,20 @@ public class UsersService : IUsersService
     }
     public Users EquipItem(int id, int itemId)
     {
-        throw new NotImplementedException();
-        // Users user = _repository.GetUserById(id);
-        // Items item = user.items.Find(i => i.Id == itemId);
-        // user.equippedItems.Add(item);
-        // user.items.Remove(item);
-        // return user;
+        try
+        {
+            Users user = _repository.GetUserById(id);
+            if (!user.items.ContainsKey(itemId))
+            {
+                throw new System.Exception("Item not found");
+            }
+            user.equippedItems.Add(itemId, user.items[itemId]);
+            user.items.Remove(itemId);
+            return user;
+        }catch(Exception e)
+        {
+            throw new System.Exception(e.Message);
+        }
     }
     public Users UnEquipItem(int id, int itemId)
     {
