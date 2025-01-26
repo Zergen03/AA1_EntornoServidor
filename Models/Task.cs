@@ -21,7 +21,7 @@ public class Task{
         Xp = CalculateXp();
         Gold = CalculateGold();
         lostLife = CalculateLostLife();
-        difficulty = _difficulty;
+        difficulty = checkDifficulty(_difficulty);
         ExpirationDate = _lostTime;
         IncraseSeed();
         Completed = false;
@@ -57,5 +57,14 @@ public class Task{
         Random random = new Random();
         int _lostLife = random.Next(1, 5) * difficulty;
         return _lostLife;
+    }
+
+    private int checkDifficulty(int _difficulty)
+    {
+        if (_difficulty < 1 || _difficulty > 5)
+        {
+            throw new System.Exception("Difficulty must be between 1 and 5");
+        }
+        return _difficulty;
     }
 }
