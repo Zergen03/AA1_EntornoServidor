@@ -46,9 +46,10 @@ public class Menu
     private void ShowTaskMenu()
     {
         Console.WriteLine("1) Show tasks");
-        Console.WriteLine("2) Add task");
-        Console.WriteLine("3) Delete task");
-        Console.WriteLine("4) Complete task");
+        Console.WriteLine("2) View task");
+        Console.WriteLine("3) Add task");
+        Console.WriteLine("4) Delete task");
+        Console.WriteLine("5) Complete task");
         Console.WriteLine("0) Exit");
     }
 
@@ -230,30 +231,113 @@ public class Menu
             switch (option)
             {
                 case 1:
-                    Console.WriteLine("Tasks:\n-------------------");
-                    Dictionary<int, string> tasks = _usersService.GetTasks(user.Id);
-                    foreach (var task in tasks)
+                    try
                     {
-                        Console.WriteLine($"{task.Key} - {task.Value}");
+                        Console.WriteLine("Tasks:\n-------------------");
+                        Dictionary<int, string> tasks = _usersService.GetTasks(user.Id);
+                        foreach (var _task in tasks)
+                        {
+                            Console.WriteLine($"{_task.Key} - {_task.Value}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error retrieving tasks: {ex.Message}");
                     }
                     break;
                 case 2:
-                    Console.WriteLine("Enter task name");
-                    
-
-                    if (!int.TryParse(Console.ReadLine(), out taskId))
-                    {
-                        Console.WriteLine("Invalid option");
-                    }
-
+                //wip - view task
+                    // try
+                    // {
+                    //     Console.WriteLine("Select task to view");
+                    //     if (!int.TryParse(Console.ReadLine(), out taskId))
+                    //     {
+                    //         Console.WriteLine("Invalid option");
+                    //     }
+                    //     AA1.Models.Task task = _taskService.GetTask(taskId);
+                    //     Console.WriteLine($"Task: {task.Title}");
+                    //     Console.WriteLine($"Description: {task.Description}");
+                    //     Console.WriteLine($"Difficulty: {task.Difficulty}");
+                    //     Console.WriteLine($"Expiration date: {task.ExpirationDate}");
+                    // }
+                    // catch (Exception ex)
+                    // {
+                    //     Console.WriteLine($"Error viewing task: {ex.Message}");
+                    // }
                     break;
                 case 3:
-                    Console.WriteLine("Delete task");
-                    // _usersService.DeleteTask(user.Id, 1);
+                    try
+                    {
+                        Console.WriteLine("Enter task title");
+                        string? title = Console.ReadLine();
+                        if (string.IsNullOrEmpty(title))
+                        {
+                            Console.WriteLine("Invalid name");
+                        }
+                        Console.WriteLine("Enter task description");
+                        string? description = Console.ReadLine() ?? "";
+                        Console.WriteLine("Enter task difficulty (1-5)");
+                        int difficulty;
+                        if (!int.TryParse(Console.ReadLine(), out difficulty))
+                        {
+                            Console.WriteLine("Invalid difficulty");
+                        }
+                        Console.WriteLine("Enter task expiration date (yyyy-MM-dd)");
+                        string? expirationDateString = Console.ReadLine();
+                        DateTime? expirationDate = null;
+                        if (!string.IsNullOrEmpty(expirationDateString))
+                        {
+                            if (DateTime.TryParse(expirationDateString, out DateTime parsedDate))
+                            {
+                                expirationDate = parsedDate;
+                            }
+                            else
+                            {
+                                throw new Exception("Invalid date");
+                            }
+                        }
+                        AA1.Models.Task task = _taskService.CreateTask(title, description, difficulty, expirationDate);
+                        _usersService.AddTask(user.Id, task);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error creating task: {ex.Message}");
+                    }
                     break;
                 case 4:
-                    Console.WriteLine("Complete task");
-                    // _usersService.CompleteTask(user.Id, 1);
+                    try
+                    {
+                        Console.WriteLine("Select task to delete");
+                        if (!int.TryParse(Console.ReadLine(), out taskId))
+                        {
+                            Console.WriteLine("Invalid option");
+                        }
+                        _usersService.DeleteTask(user.Id, taskId);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error deleting task: {ex.Message}");
+                    }
+                    break;
+                case 5:
+                    try
+                    {
+                        Console.WriteLine("Select task to complete");
+                        if (!int.TryParse(Console.ReadLine(), out taskId))
+                        {
+                            Console.WriteLine("Invalid option");
+                        }
+                        AA1.Models.Task task = _taskService.CompleteTask(taskId);
+                        _usersService.GainXp(user.Id, task.Xp);
+                        //wip - add gold
+                        Console.WriteLine($"Task completed: {task.Title}");
+                        Console.WriteLine($"XP gained: {task.Xp}");
+                        Console.WriteLine($"Gold gained: {task.Gold}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error completing task: {ex.Message}");
+                    }
                     break;
                 default:
                     Console.WriteLine("Invalid option");
