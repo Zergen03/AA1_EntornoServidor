@@ -112,12 +112,30 @@ public class UsersService : IUsersService
                 _items.Add(i + 1, user.items[i]);
             }
             return _items;
+        }catch(Exception e)
+        {
+            throw new System.Exception(e.Message);
         }
     }
-    public List<Items> GetEquippedItems(int id)
+    public Dictionary<int, string> GetEquippedItems(int id)
     {
-        throw new NotImplementedException();
-        // return _repository.GetUserById(id).equippedItems;
+        try
+        {
+            Users user = _repository.GetUserById(id);
+            if (user.equippedItems.Count == 0)
+            {
+                throw new System.Exception("No items found");
+            }
+            Dictionary<int, string> _items = new Dictionary<int, string>();
+            for (int i = 0; i < user.equippedItems.Count; i++)
+            {
+                _items.Add(i+1, user.equippedItems[i]);
+            }
+            return _items;
+        }catch(Exception e)
+        {
+            throw new System.Exception(e.Message);
+        }
     }
     public Users EquipItem(int id, int itemId)
     {
