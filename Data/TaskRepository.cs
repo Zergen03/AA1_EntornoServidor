@@ -8,6 +8,11 @@ public class TaskRepository : ITaskRepository
     private Dictionary<int, AA1.Models.Task> _tasks = new Dictionary<int, AA1.Models.Task>();
     private readonly string _filePath = Environment.GetEnvironmentVariable("USERS_JSON_PATH") ?? "../../../ddbb/Task.json";
 
+    public TaskRepository()
+    {
+        LoadTasks();
+    }
+
     public List<AA1.Models.Task> GetTasks()
     {
         return _tasks.Values.ToList();
@@ -15,12 +20,17 @@ public class TaskRepository : ITaskRepository
 
     public AA1.Models.Task GetTaskById(int id)
     {
+        if (!_tasks.ContainsKey(id))
+        {
+            throw new System.Exception("Task not found");
+        }
         return _tasks[id];
     }
 
     public AA1.Models.Task CreateTask(AA1.Models.Task task)
     {
         _tasks.Add(task.Id, task);
+        SaveChanges();
         return task;
     }
 
@@ -34,23 +44,39 @@ public class TaskRepository : ITaskRepository
     {
         AA1.Models.Task task = _tasks[id];
         _tasks.Remove(id);
+        SaveChanges();
         return task;
     }
     public void LoadTasks()
     {
-        if (!File.Exists(_filePath))
+        try
         {
-            return;
+            if (!File.Exists(_filePath))
+            {
+                return;
+            }
+            string jsonString = File.ReadAllText(_filePath);
+            if (string.IsNullOrEmpty(jsonString))
+            {
+                return;
+            }
+            var tasksToDeserialize = JsonSerializer.Deserialize<List<AA1.Models.Task>>(jsonString);
+            if (tasksToDeserialize == null)
+            {
+                return;
+            }
+            _tasks = tasksToDeserialize.ToDictionary(t => t.Id);
         }
-        string content = File.ReadAllText(_filePath);
-        var tasksToDeserialize = JsonSerializer.Deserialize<List<AA1.Models.Task>>(content);
-        _tasks = tasksToDeserialize.ToDictionary(t => t.Id);
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred while loading tasks: {ex.Message}");
+        }
     }
     public void SaveChanges()
     {
         var tasksToSerialize = _tasks.Values.ToList();
         var options = new JsonSerializerOptions { WriteIndented = true };
-        string content = JsonSerializer.Serialize(tasksToSerialize, options);
-        File.WriteAllText(_filePath, content);
+        string jsonString = JsonSerializer.Serialize(tasksToSerialize, options);
+        File.WriteAllText(_filePath, jsonString);
     }
 }
