@@ -97,6 +97,23 @@ public class UsersService : IUsersService
             throw new System.Exception(e.Message);
         }
     }
+    public Dictionary<int, string> AddItemToInventory(int id, Items item)
+    {
+        try
+        {
+            Users user = _repository.GetUserById(id);
+            if (item == null)
+            {
+                throw new System.Exception("Invalid item");
+            }
+            user.items.Add(item.Id, item.Name);
+            return user.items;
+        }
+        catch (Exception e)
+        {
+            throw new System.Exception(e.Message);
+        }
+    }
     public Dictionary<int, string> GetInventory(int id)
     {
         try
