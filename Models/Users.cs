@@ -9,9 +9,9 @@ public class Users
     public int xp { get; set; }
     public int level { get; set; }
     public int gold { get; set; }
-    public List<Items> equippedItems = new List<Items>(6);
-    public List<Items>? items { get; set; }
-    public List<Task>? tasks { get; set; }
+    public Dictionary<int, string> equippedItems { get; set; } = new Dictionary<int, string>();
+    public Dictionary<int, string> items { get; set; } = new Dictionary<int, string>();
+    public Dictionary<int, string> Tasks { get; set; } = new Dictionary<int, string>();
 
     public Users(string _name, string _password)
     {
@@ -25,7 +25,8 @@ public class Users
         IncraseSeed();
     }
 
-    public Users(){
+    public Users()
+    {
         Id = _seed;
         IncraseSeed();
     }
@@ -37,6 +38,6 @@ public class Users
 
     public override string ToString()
     {
-        return $"Name: {Name},\nLife: {life},\nXp: {xp},\nLevel: {level},\nGold: {gold}";   
+        return $"Name: {Name},\nLife: {life},\nXp: {xp},\nLevel: {level},\nGold: {gold}";
     }
 };
