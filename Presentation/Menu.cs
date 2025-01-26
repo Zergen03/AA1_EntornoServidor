@@ -180,9 +180,17 @@ public class Menu
             {
                 case 1:
                     Console.WriteLine("Unequiped items:\n-------------------");
-                    _usersService.GetInventory(user.Id);
+                    Dictionary<int, string> inventory = _usersService.GetInventory(user.Id);
+                    foreach (var item in inventory)
+                    {
+                        Console.WriteLine($"{item.Key} - {item.Value}");
+                    }
                     Console.WriteLine("Equiped items:\n-------------------");
-                    _usersService.GetEquippedItems(user.Id);
+                    Dictionary<int, string> equippedItems = _usersService.GetEquippedItems(user.Id);
+                    foreach (var item in equippedItems)
+                    {
+                        Console.WriteLine($"{item.Key} - {item.Value}");
+                    }
                     break;
                 case 2:
                     Console.WriteLine("Select item to equip");
@@ -210,6 +218,7 @@ public class Menu
     private void TaskMenu(Users user)
     {
         int option;
+        int taskId;
         do
         {
             ShowTaskMenu();
@@ -222,11 +231,21 @@ public class Menu
             {
                 case 1:
                     Console.WriteLine("Tasks:\n-------------------");
-                    // _usersService.GetTasks(user.Id);
+                    Dictionary<int, string> tasks = _usersService.GetTasks(user.Id);
+                    foreach (var task in tasks)
+                    {
+                        Console.WriteLine($"{task.Key} - {task.Value}");
+                    }
                     break;
                 case 2:
-                    Console.WriteLine("Add task");
-                    // _usersService.AddTask(user.Id, new AA1.Models.Task());
+                    Console.WriteLine("Enter task name");
+                    
+
+                    if (!int.TryParse(Console.ReadLine(), out taskId))
+                    {
+                        Console.WriteLine("Invalid option");
+                    }
+
                     break;
                 case 3:
                     Console.WriteLine("Delete task");
