@@ -47,34 +47,35 @@ public class UsersService : IUsersService
             {
                 throw new System.Exception("Invalid task");
             }
-            if(user.Tasks.ContainsKey(task.Id))
+            if (user.Tasks.ContainsKey(task.Id))
             {
                 throw new System.Exception("Task already exists");
             }
             user.Tasks.Add(task.Id, task.Title);
             return user;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new System.Exception(e.Message);
         }
     }
     public Dictionary<int, string> GetTasks(int id)
     {
-        try{
-        Users user = _repository.GetUserById(id);
-        if(user.Tasks.Count == 0)
+        try
         {
-            throw new System.Exception("No tasks found");
+            Users user = _repository.GetUserById(id);
+            if (user.Tasks.Count == 0)
+            {
+                throw new System.Exception("No tasks found");
+            }
+            Dictionary<int, string> _tasks = new Dictionary<int, string>();
+            for (int i = 0; i < user.Tasks.Count; i++)
+            {
+                _tasks.Add(i + 1, user.Tasks[i]);
+            }
+            return _tasks;
         }
-        Dictionary<int, string> _tasks = new Dictionary<int, string>();
-        for(int i = 0; i < user.Tasks.Count; i++)
-        {
-            _tasks.Add(i+1, user.Tasks[i]);
-        }
-        return _tasks;
-        }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new System.Exception(e.Message);
         }
@@ -91,15 +92,27 @@ public class UsersService : IUsersService
             user.Tasks.Remove(taskId);
             return user;
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             throw new System.Exception(e.Message);
         }
     }
-    public List<Items> GetInventory(int id)
+    public Dictionary<int, string> GetInventory(int id)
     {
-        throw new NotImplementedException();
-        // return _repository.GetUserById(id).items;
+        try
+        {
+            Users user = _repository.GetUserById(id);
+            if (user.items.Count == 0)
+            {
+                throw new System.Exception("No items found");
+            }
+            Dictionary<int, string> _items = new Dictionary<int, string>();
+            for (int i = 0; i < user.items.Count; i++)
+            {
+                _items.Add(i + 1, user.items[i]);
+            }
+            return _items;
+        }
     }
     public List<Items> GetEquippedItems(int id)
     {
