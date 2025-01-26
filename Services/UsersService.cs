@@ -81,9 +81,20 @@ public class UsersService : IUsersService
     }
     public Users DeleteTask(int id, int taskId)
     {
-        throw new NotImplementedException();
-        // _repository.GetUserById(id).tasks.RemoveAll(t => t.Id == taskId);
-        // return _repository.GetUserById(id);
+        try
+        {
+            Users user = _repository.GetUserById(id);
+            if (!user.Tasks.ContainsKey(taskId))
+            {
+                throw new System.Exception("Task not found");
+            }
+            user.Tasks.Remove(taskId);
+            return user;
+        }
+        catch(Exception e)
+        {
+            throw new System.Exception(e.Message);
+        }
     }
     public List<Items> GetInventory(int id)
     {
