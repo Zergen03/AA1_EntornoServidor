@@ -59,9 +59,25 @@ public class UsersService : IUsersService
             throw new System.Exception(e.Message);
         }
     }
-    public List<AA1.Models.Task> GetTasks(int id)
+    public Dictionary<int, string> GetTasks(int id)
     {
-        throw new System.NotImplementedException();
+        try{
+        Users user = _repository.GetUserById(id);
+        if(user.Tasks.Count == 0)
+        {
+            throw new System.Exception("No tasks found");
+        }
+        Dictionary<int, string> _tasks = new Dictionary<int, string>();
+        for(int i = 0; i < user.Tasks.Count; i++)
+        {
+            _tasks.Add(i+1, user.Tasks[i]);
+        }
+        return _tasks;
+        }
+        catch(Exception e)
+        {
+            throw new System.Exception(e.Message);
+        }
     }
     public Users DeleteTask(int id, int taskId)
     {
