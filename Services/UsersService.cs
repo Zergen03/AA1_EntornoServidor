@@ -167,6 +167,7 @@ public class UsersService : IUsersService
             }
             user.equippedItems.Add(itemId, user.items[itemId]);
             user.items.Remove(itemId);
+            _repository.UpdateUser(id, user);
             return user;
         }
         catch (Exception e)
@@ -185,6 +186,7 @@ public class UsersService : IUsersService
             }
             user.items.Add(itemId, user.equippedItems[itemId]);
             user.equippedItems.Remove(itemId);
+            _repository.UpdateUser(id, user);
             return user;
         }
         catch (Exception e)
@@ -196,24 +198,43 @@ public class UsersService : IUsersService
     {
         Users user = _repository.GetUserById(id);
         user.life -= damage;
+        _repository.UpdateUser(id, user);
         return user;
     }
     public Users Heal(int id, int heal)
     {
         Users user = _repository.GetUserById(id);
         user.life += heal;
+        _repository.UpdateUser(id, user);
         return user;
     }
     public Users GainXp(int id, int xp)
     {
         Users user = _repository.GetUserById(id);
+        double nextLevel = 50 * user.level + (Math.Pow(user.level, 2) * 10);
+        if (user.xp + xp >= nextLevel)
+        {
+            user = LevelUp(id);
+            user.xp = user.xp + xp - (int)nextLevel;
+        }else
+        {
         user.xp += xp;
+        }
+        _repository.UpdateUser(id, user);
         return user;
     }
-    public Users levelUp(int id)
+    private Users LevelUp(int id)
     {
         Users user = _repository.GetUserById(id);
         user.level++;
+        _repository.UpdateUser(id, user);
+        return user;
+    }
+    public Users GainGold(int id, int gold)
+    {
+        Users user = _repository.GetUserById(id);
+        user.gold += gold;
+        _repository.UpdateUser(id, user);
         return user;
     }
 }
