@@ -9,7 +9,7 @@ public class Menu
     private readonly IUsersRepository _usersRepository;
     private readonly IUsersService _usersService;
     private readonly IItemsService _itemsService;
-    private readonly ITaskService _taskService;     
+    private readonly ITaskService _taskService;
 
     public Menu(IUsersRepository usersRepository, IUsersService usersService, IItemsService itemsService, ITaskService taskService)
     {
@@ -20,14 +20,14 @@ public class Menu
     }
 
 
-    private void ManinMenu()
+    private void ShowMainMenu()
     {
         Console.WriteLine("1) Login");
         Console.WriteLine("2) Register");
         Console.WriteLine("0) Exit");
     }
 
-        private void UserMenu()
+    private void ShowUserMenu()
     {
         Console.WriteLine("1) Inventory");
         Console.WriteLine("2) Tasks");
@@ -35,7 +35,7 @@ public class Menu
         Console.WriteLine("0) Exit");
     }
 
-        private void InventoryMenu()
+    private void ShowInventoryMenu()
     {
         Console.WriteLine("1) Show inventory");
         Console.WriteLine("2) Equip item");
@@ -43,12 +43,21 @@ public class Menu
         Console.WriteLine("0) Exit");
     }
 
-    public void ShowMenu()
+    private void ShowTaskMenu()
+    {
+        Console.WriteLine("1) Show tasks");
+        Console.WriteLine("2) Add task");
+        Console.WriteLine("3) Delete task");
+        Console.WriteLine("4) Complete task");
+        Console.WriteLine("0) Exit");
+    }
+
+    public void MainMenu()
     {
         int option;
         do
         {
-            ManinMenu();
+            ShowMainMenu();
             if (!int.TryParse(Console.ReadLine(), out option))
             {
                 Console.WriteLine("Invalid option");
@@ -73,26 +82,28 @@ public class Menu
     {
         Console.WriteLine("Enter your name");
         string? name = Console.ReadLine();
-        if(string.IsNullOrEmpty(name))
+        if (string.IsNullOrEmpty(name))
         {
             Console.WriteLine("Invalid name");
             return;
         }
         Console.WriteLine("Enter your password");
         string? password = Console.ReadLine();
-        if(string.IsNullOrEmpty(password))
+        if (string.IsNullOrEmpty(password))
         {
             Console.WriteLine("Invalid password");
             return;
         }
 
-        try{
+        try
+        {
             Users user = _usersService.Login(name, password);
             MenuUser(user);
-        }catch(System.Exception ex)
+        }
+        catch (System.Exception ex)
         {
             Console.WriteLine(ex.Message);
-            ShowMenu();
+            MainMenu();
         }
     }
 
@@ -100,14 +111,14 @@ public class Menu
     {
         Console.WriteLine("Enter your name");
         string? name = Console.ReadLine();
-        if(string.IsNullOrEmpty(name))
+        if (string.IsNullOrEmpty(name))
         {
             Console.WriteLine("Invalid name");
             return;
         }
         Console.WriteLine("Enter your password");
         string? password = Console.ReadLine();
-        if(string.IsNullOrEmpty(password))
+        if (string.IsNullOrEmpty(password))
         {
             Console.WriteLine("Invalid password");
             return;
@@ -119,7 +130,7 @@ public class Menu
         int option;
         do
         {
-            UserMenu();
+            ShowUserMenu();
             if (!int.TryParse(Console.ReadLine(), out option))
             {
                 Console.WriteLine("Invalid option");
@@ -136,9 +147,6 @@ public class Menu
                 case 3:
                     Console.WriteLine("Stats");
                     break;
-                case 0:
-                    Console.WriteLine("Exit");
-                    break;
                 default:
                     Console.WriteLine("Invalid option");
                     break;
@@ -151,7 +159,7 @@ public class Menu
         int option;
         do
         {
-            InventoryMenu();
+            ShowInventoryMenu();
             if (!int.TryParse(Console.ReadLine(), out option))
             {
                 Console.WriteLine("Invalid option");
@@ -178,15 +186,12 @@ public class Menu
         } while (int.TryParse(Console.ReadLine(), out option) && option != 0);
     }
 
-    private void TaskMenu(Users user){
+    private void TaskMenu(Users user)
+    {
         int option;
         do
         {
-            Console.WriteLine("1) Show tasks");
-            Console.WriteLine("2) Add task");
-            Console.WriteLine("3) Delete task");
-            Console.WriteLine("4) Complete task");
-            Console.WriteLine("0) Exit");
+            ShowTaskMenu();
             if (!int.TryParse(Console.ReadLine(), out option))
             {
                 Console.WriteLine("Invalid option");
