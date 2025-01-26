@@ -129,7 +129,8 @@ public class UsersService : IUsersService
                 _items.Add(i + 1, user.items[i]);
             }
             return _items;
-        }catch(Exception e)
+        }
+        catch (Exception e)
         {
             throw new System.Exception(e.Message);
         }
@@ -146,10 +147,11 @@ public class UsersService : IUsersService
             Dictionary<int, string> _items = new Dictionary<int, string>();
             for (int i = 0; i < user.equippedItems.Count; i++)
             {
-                _items.Add(i+1, user.equippedItems[i]);
+                _items.Add(i + 1, user.equippedItems[i]);
             }
             return _items;
-        }catch(Exception e)
+        }
+        catch (Exception e)
         {
             throw new System.Exception(e.Message);
         }
@@ -166,19 +168,29 @@ public class UsersService : IUsersService
             user.equippedItems.Add(itemId, user.items[itemId]);
             user.items.Remove(itemId);
             return user;
-        }catch(Exception e)
+        }
+        catch (Exception e)
         {
             throw new System.Exception(e.Message);
         }
     }
     public Users UnEquipItem(int id, int itemId)
     {
-        throw new NotImplementedException();
-        // Users user = _repository.GetUserById(id);
-        // Items item = user.equippedItems.Find(i => i.Id == itemId);
-        // user.items.Add(item);
-        // user.equippedItems.Remove(item);
-        // return user;
+        try
+        {
+            Users user = _repository.GetUserById(id);
+            if (!user.items.ContainsKey(itemId))
+            {
+                throw new System.Exception("Item not found");
+            }
+            user.items.Add(itemId, user.equippedItems[itemId]);
+            user.equippedItems.Remove(itemId);
+            return user;
+        }
+        catch (Exception e)
+        {
+            throw new System.Exception(e.Message);
+        }
     }
     public Users TakeDamage(int id, int damage)
     {
