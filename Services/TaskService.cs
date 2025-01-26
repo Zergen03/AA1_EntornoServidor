@@ -10,6 +10,23 @@ public class TaskService : ITaskService
     public TaskService(ITaskRepository taskRepository)
     {
         _taskRepository = taskRepository;
+        foreach (AA1.Models.Task task in _taskRepository.GetTasks())
+        {
+            if (task.ExpirationDate < DateTime.Now)
+            {
+                ExpireTask(task.Id);
+            }
+        }
+    }
+
+    public AA1.Models.Task CreateTask(string _title, string _description, int _difficulty, DateTime? _expirationDate)
+    {
+        try{
+        AA1.Models.Task task = new AA1.Models.Task(_title, _description, _difficulty, _expirationDate);
+        return _taskRepository.CreateTask(task);
+        }catch(System.Exception e){
+            throw new System.Exception($"There was an error creating the task: {e.Message}");
+        }
     }
 
     public bool IsTaskExpired(int id)

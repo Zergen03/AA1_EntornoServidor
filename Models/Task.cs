@@ -4,7 +4,7 @@ public class Task{
     private static int _seed = 0;
     public int Id { get; set; }
     public string Title { get; set; }
-    public string Description { get; set; }
+    public string? Description { get; set; }
     public int Xp { get; set; }
     public int Gold { get; set; }
     public int difficulty { get; set; }
