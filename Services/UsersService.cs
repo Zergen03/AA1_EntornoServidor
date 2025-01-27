@@ -62,7 +62,7 @@ public class UsersService : IUsersService
                 throw new System.Exception("Task already exists");
             }
             user.Tasks.Add(task.Id, task.Title);
-            return user;
+            return _repository.UpdateUser(id, user);
         }
         catch (Exception e)
         {
@@ -100,14 +100,14 @@ public class UsersService : IUsersService
                 throw new System.Exception("Task not found");
             }
             user.Tasks.Remove(taskId);
-            return user;
+            return _repository.UpdateUser(id, user);
         }
         catch (Exception e)
         {
             throw new System.Exception(e.Message);
         }
     }
-    public Dictionary<int, string> AddItemToInventory(int id, Items item)
+    public Users AddItemToInventory(int id, Items item)
     {
         try
         {
@@ -117,7 +117,7 @@ public class UsersService : IUsersService
                 throw new System.Exception("Invalid item");
             }
             user.items.Add(item.Id, item.Name);
-            return user.items;
+            return _repository.UpdateUser(id, user);
         }
         catch (Exception e)
         {

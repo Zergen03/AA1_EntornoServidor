@@ -10,7 +10,7 @@ public interface IUsersService
     Users AddTask(int id, AA1.Models.Task task);
     Dictionary<int, string> GetTasks(int id);
     Users DeleteTask(int id, int taskId);
-    Dictionary<int,string> AddItemToInventory(int id, Items item);
+    Users AddItemToInventory(int id, Items item);
     Dictionary<int,string> GetInventory(int id);
     Dictionary<int,string> GetEquippedItems(int id);
     Users EquipItem(int id, int itemId);
