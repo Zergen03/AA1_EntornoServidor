@@ -24,19 +24,20 @@ public class ItemsRepository : IItemsRepository
         {
             throw new System.Exception("Item not found");
         }
-            return _items[id];
+        return _items[id];
     }
 
-    public Items CreateItem(string _name, int _value, Dictionary<string, int> _stats, string _type)
+    public Items CreateItem(Items item)
     {
-        Items item = new Items(_name, _value, _stats, _type);
         _items.Add(item.Id, item);
+        SaveChanges();
         return item;
     }
 
     public Items UpdateItem(int id, Items item)
     {
         _items[id] = item;
+        SaveChanges();
         return item;
     }
 
@@ -44,23 +45,33 @@ public class ItemsRepository : IItemsRepository
     {
         Items item = _items[id];
         _items.Remove(id);
+        SaveChanges();
         return item;
-    }
-
-    public List<Items> ListItems()
-    {
-        return _items.Values.ToList();
     }
 
     public void LoadItems()
     {
-        if (!File.Exists(_filePath))
+        try
         {
-            return;
+            if (!File.Exists(_filePath))
+            {
+                return;
+            }
+            string jsonString = File.ReadAllText(_filePath);
+            if (string.IsNullOrEmpty(jsonString))
+            {
+                return;
+            }
+            var itemsToDeserialize = JsonSerializer.Deserialize<List<AA1.Models.Items>>(jsonString);
+            if (itemsToDeserialize != null)
+            {
+                _items = itemsToDeserialize.ToDictionary(i => i.Id);
+            }
         }
-        string itemsJson = File.ReadAllText(_filePath);
-        var ItemsToDeserialize = JsonSerializer.Deserialize<List<Items>>(itemsJson);
-        _items = ItemsToDeserialize.ToDictionary(i => i.Id);
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred while loading items: {ex.Message}");
+        }
     }
 
     public void SaveChanges()
