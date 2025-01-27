@@ -1,27 +1,37 @@
 using AA1.Models;
 using AA1.Data;
+using AA1.DTOs;
 
 namespace AA1.Services;
 
 public class UsersService : IUsersService
 {
     private readonly IUsersRepository _repository;
-    public UsersService(IUsersRepository repository)
+    private readonly ITaskService _taskService;
+    public UsersService(IUsersRepository repository, ITaskService taskService)
     {
         _repository = repository;
+        _taskService = taskService;
     }
 
-    public Users Login(string _name, string _password)
+    public LoginResultDTO Login(string _name, string _password)
     {
         Users? user = _repository.GetUserByName(_name);
         if (user == null || user.password != _password)
         {
             throw new System.Exception("User or password incorrect");
         }
-        return user;
+        int _damageTaken = CheckExpiredTasks(user);
+        LoginResultDTO loginResult = new LoginResultDTO
+        {
+            User = user,
+            RemainingLife = user.life,
+            DamageTaken = _damageTaken
+        };
+        return loginResult;
     }
 
-    public Users Register(string _name, string _password)
+    public LoginResultDTO Register(string _name, string _password)
     {
         if (_repository.GetUserByName(_name) == null)
         {
@@ -167,6 +177,7 @@ public class UsersService : IUsersService
             }
             user.equippedItems.Add(itemId, user.items[itemId]);
             user.items.Remove(itemId);
+            _repository.UpdateUser(id, user);
             return user;
         }
         catch (Exception e)
@@ -185,6 +196,7 @@ public class UsersService : IUsersService
             }
             user.items.Add(itemId, user.equippedItems[itemId]);
             user.equippedItems.Remove(itemId);
+            _repository.UpdateUser(id, user);
             return user;
         }
         catch (Exception e)
@@ -192,28 +204,64 @@ public class UsersService : IUsersService
             throw new System.Exception(e.Message);
         }
     }
-    public Users TakeDamage(int id, int damage)
+    private Users TakeDamage(int id, int damage)
     {
         Users user = _repository.GetUserById(id);
         user.life -= damage;
+        _repository.UpdateUser(id, user);
         return user;
     }
     public Users Heal(int id, int heal)
     {
         Users user = _repository.GetUserById(id);
         user.life += heal;
+        _repository.UpdateUser(id, user);
         return user;
     }
     public Users GainXp(int id, int xp)
     {
         Users user = _repository.GetUserById(id);
-        user.xp += xp;
+        double nextLevel = 50 * user.level + (Math.Pow(user.level, 2) * 10);
+        if (user.xp + xp >= nextLevel)
+        {
+            user = LevelUp(id);
+            user.xp = user.xp + xp - (int)nextLevel;
+        }
+        else
+        {
+            user.xp += xp;
+        }
+        _repository.UpdateUser(id, user);
         return user;
     }
-    public Users levelUp(int id)
+    private Users LevelUp(int id)
     {
         Users user = _repository.GetUserById(id);
         user.level++;
+        _repository.UpdateUser(id, user);
         return user;
+    }
+    public Users GainGold(int id, int gold)
+    {
+        Users user = _repository.GetUserById(id);
+        user.gold += gold;
+        _repository.UpdateUser(id, user);
+        return user;
+    }
+
+    private int CheckExpiredTasks(Users user)
+    {
+        int damage = 0;
+        foreach (var task in user.Tasks)
+        {
+            AA1.Models.Task taskToCheck = _taskService.GetTaskById(task.Key);
+            if (_taskService.IsTaskExpired(taskToCheck.Id))
+            {
+                TakeDamage(user.Id, taskToCheck.lostLife);
+                damage += taskToCheck.lostLife;
+                user.Tasks.Remove(task.Key);
+            }
+        }
+        return damage;
     }
 }

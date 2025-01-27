@@ -45,6 +45,7 @@ class UsersRepository : IUsersRepository
     public Users UpdateUser(int id, Users user)
     {
         _users[id] = user;
+        SaveChanges();
         return user;
     }
 
@@ -52,6 +53,7 @@ class UsersRepository : IUsersRepository
     {
         Users user = _users[id];
         _users.Remove(id);
+        SaveChanges();
         return user;
     }
     public void LoadUsers()

@@ -1,3 +1,4 @@
+C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\Services\obj\Debug\net8.0\AA1.Services.csproj.AssemblyReference.cache
 C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\Services\obj\Debug\net8.0\AA1.Services.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\Services\obj\Debug\net8.0\AA1.Services.csproj.CoreCompileInputs.cache
 C:\Users\alexi\Documents\GitHub\DAWO_EntornoServidor\AA1\Services\obj\Debug\net8.0\AA1.Services.sourcelink.json
