@@ -37,6 +37,7 @@ public class TaskRepository : ITaskRepository
     public AA1.Models.Task UpdateTask(int id, AA1.Models.Task task)
     {
         _tasks[id] = task;
+        SaveChanges();
         return task;
     }
 
