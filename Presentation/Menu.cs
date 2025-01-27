@@ -352,13 +352,14 @@ public class Menu
                             Console.WriteLine("Invalid option");
                         }
                         _usersService.DeleteTask(userDTO.User.Id, taskId);
+                        _taskService.DeleteTask(taskId);
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine($"Error deleting task: {ex.Message}");
                     }
                     break;
-                case 5:
+                case 5: // Complete task
                     try
                     {
                         Console.WriteLine("Select task to complete");

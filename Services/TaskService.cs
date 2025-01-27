@@ -46,6 +46,19 @@ public class TaskService : ITaskService
         return Task;
     }
 
+    public void DeleteTask(int id)
+    {
+        if (id < 0)
+        {
+            throw new System.Exception("Invalid id");
+        }
+        if (_taskRepository.GetTaskById(id) == null)
+        {
+            throw new System.Exception("Task not found");
+        }
+        _taskRepository.DeleteTask(id);
+    }
+
     public bool IsTaskExpired(int id)
     {
         AA1.Models.Task task = _taskRepository.GetTaskById(id);
