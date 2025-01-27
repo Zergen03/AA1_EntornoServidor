@@ -35,7 +35,7 @@ public class Task{
 
     public override string ToString()
     {
-        return $"Title: {Title},\nDescription: {Description},\nXp: {Xp},\nGold: {Gold},\nDifficulty: {difficulty}, LostLife: {ExpirationDate?.ToString() ?? "0"}";   
+        return $"Title: {Title},\nDescription: {Description},\nDifficulty: {difficulty},\nExpiration Date: {ExpirationDate?.ToString() ?? "0"}";   
     }
 
     private int CalculateGold()

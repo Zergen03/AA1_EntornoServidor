@@ -17,5 +17,5 @@ public interface IUsersService
     Users UnEquipItem(int id, int itemId);
     Users Heal(int id, int heal);
     Users GainXp(int id, int xp);
-
+    Users GainGold(int id, int gold);
 }

@@ -20,7 +20,6 @@ public class Menu
         _taskService = taskService;
     }
 
-
     private void ShowMainMenu()
     {
         Console.WriteLine("1) Login");
@@ -247,24 +246,20 @@ public class Menu
                     }
                     break;
                 case 2:
-                //wip - view task
-                    // try
-                    // {
-                    //     Console.WriteLine("Select task to view");
-                    //     if (!int.TryParse(Console.ReadLine(), out taskId))
-                    //     {
-                    //         Console.WriteLine("Invalid option");
-                    //     }
-                    //     AA1.Models.Task task = _taskService.GetTask(taskId);
-                    //     Console.WriteLine($"Task: {task.Title}");
-                    //     Console.WriteLine($"Description: {task.Description}");
-                    //     Console.WriteLine($"Difficulty: {task.Difficulty}");
-                    //     Console.WriteLine($"Expiration date: {task.ExpirationDate}");
-                    // }
-                    // catch (Exception ex)
-                    // {
-                    //     Console.WriteLine($"Error viewing task: {ex.Message}");
-                    // }
+                    try
+                    {
+                        Console.WriteLine("Select task to view");
+                        if (!int.TryParse(Console.ReadLine(), out taskId))
+                        {
+                            Console.WriteLine("Invalid option");
+                        }
+                        AA1.Models.Task task = _taskService.GetTaskById(taskId);
+                        Console.WriteLine(task.ToString());
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error viewing task: {ex.Message}");
+                    }
                     break;
                 case 3:
                     try
@@ -330,7 +325,7 @@ public class Menu
                         }
                         AA1.Models.Task task = _taskService.CompleteTask(taskId);
                         _usersService.GainXp(userDTO.User.Id, task.Xp);
-                        //wip - add gold
+                        Users fasjfa = _usersService.GainGold(userDTO.User.Id, task.Gold);
                         Console.WriteLine($"Task completed: {task.Title}");
                         Console.WriteLine($"XP gained: {task.Xp}");
                         Console.WriteLine($"Gold gained: {task.Gold}");
