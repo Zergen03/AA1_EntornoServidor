@@ -15,5 +15,4 @@ public interface IUsersService
     Users UnEquipItem(int id, int itemId);
     Users TakeDamage(int id, int damage);
     Users Heal(int id, int heal);
-    Users levelUp(int id);
 }
