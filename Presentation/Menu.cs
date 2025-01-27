@@ -248,6 +248,13 @@ public class Menu
     {
         int option;
         int taskId;
+        Dictionary<int, int> taskMapping = new Dictionary<int, int>();
+        int index = 1;
+        foreach (var task in userDTO.User.Tasks)
+        {
+            taskMapping.Add(index, task.Key);
+            index++;
+        }
         do
         {
             ShowTaskMenu();
@@ -266,9 +273,11 @@ public class Menu
                     {
                         Console.WriteLine("Tasks:\n-------------------");
                         Dictionary<int, string> tasks = _usersService.GetTasks(userDTO.User.Id);
-                        foreach (var _task in tasks)
+                        index = 1;
+                        foreach (var task in tasks)
                         {
-                            Console.WriteLine($"{_task.Key} - {_task.Value}");
+                            Console.WriteLine($"{index} - {task.Value}");
+                            index++;
                         }
                     }
                     catch (Exception ex)
@@ -285,7 +294,9 @@ public class Menu
                         {
                             Console.WriteLine("Invalid option");
                         }
-                        AA1.Models.Task task = _taskService.GetTaskById(taskId);
+                        Dictionary<int, string> tasks = _usersService.GetTasks(userDTO.User.Id);
+                        int mappedTaskId = taskMapping[taskId];
+                        AA1.Models.Task task = _taskService.GetTaskById(mappedTaskId);
                         Console.WriteLine(task.ToString());
                     }
                     catch (Exception ex)

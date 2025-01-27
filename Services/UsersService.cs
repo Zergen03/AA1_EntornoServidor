@@ -79,9 +79,9 @@ public class UsersService : IUsersService
                 throw new System.Exception("No tasks found");
             }
             Dictionary<int, string> _tasks = new Dictionary<int, string>();
-            for (int i = 0; i < user.Tasks.Count; i++)
+            foreach (var task in user.Tasks)
             {
-                _tasks.Add(i + 1, user.Tasks[i]);
+                _tasks.Add(task.Key, task.Value);
             }
             return _tasks;
         }

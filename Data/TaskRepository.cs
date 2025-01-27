@@ -62,11 +62,10 @@ public class TaskRepository : ITaskRepository
                 return;
             }
             var tasksToDeserialize = JsonSerializer.Deserialize<List<AA1.Models.Task>>(jsonString);
-            if (tasksToDeserialize == null)
+            if (tasksToDeserialize != null)
             {
-                return;
+                _tasks = tasksToDeserialize.ToDictionary(t => t.Id);
             }
-            _tasks = tasksToDeserialize.ToDictionary(t => t.Id);
         }
         catch (Exception ex)
         {

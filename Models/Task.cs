@@ -1,6 +1,7 @@
 namespace AA1.Models;
 
-public class Task{
+public class Task
+{
     private static int _seed = 0;
     public int Id { get; set; }
     public string Title { get; set; }
@@ -28,6 +29,12 @@ public class Task{
         Expired = false;
     }
 
+    public Task()
+    {
+        Id = _seed;
+        IncraseSeed();
+    }
+
     private static void IncraseSeed()
     {
         _seed++;
@@ -35,7 +42,7 @@ public class Task{
 
     public override string ToString()
     {
-        return $"Title: {Title},\nDescription: {Description},\nDifficulty: {difficulty},\nExpiration Date: {ExpirationDate?.ToString() ?? "0"}";   
+        return $"Title: {Title},\nDescription: {Description},\nDifficulty: {difficulty},\nExpiration Date: {ExpirationDate?.ToString() ?? "0"}";
     }
 
     private int CalculateGold()

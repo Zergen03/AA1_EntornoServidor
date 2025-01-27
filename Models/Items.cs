@@ -19,6 +19,12 @@ public class Items{
         IncraseSeed();
     }
 
+    public Items()
+    {
+        Id = _seed;
+        IncraseSeed();
+    }
+
     private static void IncraseSeed()
     {
         _seed++;
