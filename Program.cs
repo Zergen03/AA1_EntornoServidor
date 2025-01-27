@@ -19,16 +19,16 @@ var UsersRepository = serviceProvider.GetService<IUsersRepository>();
 var UsersService = serviceProvider.GetService<IUsersService>();
 var Menu = serviceProvider.GetService<Menu>();
 
-// Menu.ShowMenu();
+Menu.MainMenu();
 
 
-try{
-    if(UsersService != null){
-        UsersService.Register("Alex", "1234");
-        Console.WriteLine("User registered");
-    }else{
-        Console.WriteLine("Service is null");
-    }
-}catch(Exception e){
-    Console.WriteLine(e.Message);
-}
+// try{
+//     if(UsersService != null){
+//         UsersService.Register("Alex", "1234");
+//         Console.WriteLine("User registered");
+//     }else{
+//         Console.WriteLine("Service is null");
+//     }
+// }catch(Exception e){
+//     Console.WriteLine(e.Message);
+// }

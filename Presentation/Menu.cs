@@ -62,6 +62,8 @@ public class Menu
             if (!int.TryParse(Console.ReadLine(), out option))
             {
                 Console.WriteLine("Invalid option");
+                option = -1;
+                continue;
             }
 
             switch (option)
@@ -76,7 +78,7 @@ public class Menu
                     Console.WriteLine("Invalid option");
                     break;
             }
-        } while (int.TryParse(Console.ReadLine(), out option) && option != 0);
+        } while (option != 0);
     }
 
     private void Login()
@@ -146,6 +148,7 @@ public class Menu
             if (!int.TryParse(Console.ReadLine(), out option))
             {
                 Console.WriteLine("Invalid option");
+                continue;
             }
 
             switch (option)
@@ -176,38 +179,61 @@ public class Menu
             if (!int.TryParse(Console.ReadLine(), out option))
             {
                 Console.WriteLine("Invalid option");
+                continue;
             }
             switch (option)
             {
                 case 1:
-                    Console.WriteLine("Unequiped items:\n-------------------");
-                    Dictionary<int, string> inventory = _usersService.GetInventory(userDTO.User.Id);
-                    foreach (var item in inventory)
+                    try
                     {
-                        Console.WriteLine($"{item.Key} - {item.Value}");
+                        Console.WriteLine("Unequiped items:\n-------------------");
+                        Dictionary<int, string> inventory = _usersService.GetInventory(userDTO.User.Id);
+                        foreach (var item in inventory)
+                        {
+                            Console.WriteLine($"{item.Key} - {item.Value}");
+                        }
+                        Console.WriteLine("Equiped items:\n-------------------");
+                        Dictionary<int, string> equippedItems = _usersService.GetEquippedItems(userDTO.User.Id);
+                        foreach (var item in equippedItems)
+                        {
+                            Console.WriteLine($"{item.Key} - {item.Value}");
+                        }
                     }
-                    Console.WriteLine("Equiped items:\n-------------------");
-                    Dictionary<int, string> equippedItems = _usersService.GetEquippedItems(userDTO.User.Id);
-                    foreach (var item in equippedItems)
+                    catch (Exception ex)
                     {
-                        Console.WriteLine($"{item.Key} - {item.Value}");
+                        Console.WriteLine($"Error retrieving inventory: {ex.Message}");
                     }
                     break;
                 case 2:
-                    Console.WriteLine("Select item to equip");
-                    if (!int.TryParse(Console.ReadLine(), out itemId))
+                    try
                     {
-                        Console.WriteLine("Invalid option");
+                        Console.WriteLine("Select item to equip");
+                        if (!int.TryParse(Console.ReadLine(), out itemId))
+                        {
+                            Console.WriteLine("Invalid option");
+                            continue;
+                        }
+                        _usersService.EquipItem(userDTO.User.Id, itemId);
                     }
-                    _usersService.EquipItem(userDTO.User.Id, itemId);
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error equipping item: {ex.Message}");
+                    }
                     break;
                 case 3:
-                    Console.WriteLine("Select item to unequip");
-                    if (!int.TryParse(Console.ReadLine(), out itemId))
+                    try
                     {
-                        Console.WriteLine("Invalid option");
+                        Console.WriteLine("Select item to unequip");
+                        if (!int.TryParse(Console.ReadLine(), out itemId))
+                        {
+                            Console.WriteLine("Invalid option");
+                        }
+                        _usersService.UnEquipItem(userDTO.User.Id, itemId);
                     }
-                    _usersService.UnEquipItem(userDTO.User.Id, itemId);
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error unequipping item: {ex.Message}");
+                    }
                     break;
                 default:
                     Console.WriteLine("Invalid option");
@@ -226,6 +252,7 @@ public class Menu
             if (!int.TryParse(Console.ReadLine(), out option))
             {
                 Console.WriteLine("Invalid option");
+                continue;
             }
 
             switch (option)
@@ -243,6 +270,7 @@ public class Menu
                     catch (Exception ex)
                     {
                         Console.WriteLine($"Error retrieving tasks: {ex.Message}");
+                        continue;
                     }
                     break;
                 case 2:

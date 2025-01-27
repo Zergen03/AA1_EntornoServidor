@@ -7,7 +7,7 @@ class UsersRepository : IUsersRepository
 {
 
     private Dictionary<int, Users> _users = new Dictionary<int, Users>();
-    private readonly string _filePath = Environment.GetEnvironmentVariable("USERS_JSON_PATH") ?? "../../../ddbb/Users.json";
+    private readonly string _filePath = Environment.GetEnvironmentVariable("USERS_JSON_PATH") ?? "./ddbb/Users.json";
 
 
     public UsersRepository()
