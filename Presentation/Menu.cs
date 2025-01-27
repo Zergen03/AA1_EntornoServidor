@@ -1,8 +1,9 @@
 using AA1.Models;
 using AA1.Data;
 using AA1.Services;
+using AA1.DTOs;
 
-namespace AA1.Menu;
+namespace AA1.Presentation;
 public class Menu
 {
 
@@ -98,8 +99,8 @@ public class Menu
 
         try
         {
-            Users user = _usersService.Login(name, password);
-            MenuUser(user);
+            LoginResultDTO userDTO = _usersService.Login(name, password);
+            MenuUser(userDTO);
         }
         catch (System.Exception ex)
         {
@@ -127,8 +128,8 @@ public class Menu
 
         try
         {
-            Users user = _usersService.Register(name, password);
-            MenuUser(user);
+            LoginResultDTO userDTO = _usersService.Register(name, password);
+            MenuUser(userDTO);
         }
         catch (System.Exception ex)
         {
@@ -137,7 +138,7 @@ public class Menu
         }
     }
 
-    private void MenuUser(Users user)
+    private void MenuUser(LoginResultDTO userDTO)
     {
         int option;
         do
@@ -151,13 +152,13 @@ public class Menu
             switch (option)
             {
                 case 1:
-                    InventoryMenu(user);
+                    InventoryMenu(userDTO);
                     break;
                 case 2:
-                    TaskMenu(user);
+                    TaskMenu(userDTO);
                     break;
                 case 3:
-                    user.ToString();
+                    userDTO.ToString();
                     break;
                 default:
                     Console.WriteLine("Invalid option");
@@ -166,7 +167,7 @@ public class Menu
         } while (int.TryParse(Console.ReadLine(), out option) && option != 0);
     }
 
-    private void InventoryMenu(Users user)
+    private void InventoryMenu(LoginResultDTO userDTO)
     {
         int option;
         int itemId;
@@ -181,13 +182,13 @@ public class Menu
             {
                 case 1:
                     Console.WriteLine("Unequiped items:\n-------------------");
-                    Dictionary<int, string> inventory = _usersService.GetInventory(user.Id);
+                    Dictionary<int, string> inventory = _usersService.GetInventory(userDTO.User.Id);
                     foreach (var item in inventory)
                     {
                         Console.WriteLine($"{item.Key} - {item.Value}");
                     }
                     Console.WriteLine("Equiped items:\n-------------------");
-                    Dictionary<int, string> equippedItems = _usersService.GetEquippedItems(user.Id);
+                    Dictionary<int, string> equippedItems = _usersService.GetEquippedItems(userDTO.User.Id);
                     foreach (var item in equippedItems)
                     {
                         Console.WriteLine($"{item.Key} - {item.Value}");
@@ -199,7 +200,7 @@ public class Menu
                     {
                         Console.WriteLine("Invalid option");
                     }
-                    _usersService.EquipItem(user.Id, itemId);
+                    _usersService.EquipItem(userDTO.User.Id, itemId);
                     break;
                 case 3:
                     Console.WriteLine("Select item to unequip");
@@ -207,7 +208,7 @@ public class Menu
                     {
                         Console.WriteLine("Invalid option");
                     }
-                    _usersService.UnEquipItem(user.Id, itemId);
+                    _usersService.UnEquipItem(userDTO.User.Id, itemId);
                     break;
                 default:
                     Console.WriteLine("Invalid option");
@@ -216,7 +217,7 @@ public class Menu
         } while (int.TryParse(Console.ReadLine(), out option) && option != 0);
     }
 
-    private void TaskMenu(Users user)
+    private void TaskMenu(LoginResultDTO userDTO)
     {
         int option;
         int taskId;
@@ -234,7 +235,7 @@ public class Menu
                     try
                     {
                         Console.WriteLine("Tasks:\n-------------------");
-                        Dictionary<int, string> tasks = _usersService.GetTasks(user.Id);
+                        Dictionary<int, string> tasks = _usersService.GetTasks(userDTO.User.Id);
                         foreach (var _task in tasks)
                         {
                             Console.WriteLine($"{_task.Key} - {_task.Value}");
@@ -297,7 +298,7 @@ public class Menu
                             }
                         }
                         AA1.Models.Task task = _taskService.CreateTask(title, description, difficulty, expirationDate);
-                        _usersService.AddTask(user.Id, task);
+                        _usersService.AddTask(userDTO.User.Id, task);
                     }
                     catch (Exception ex)
                     {
@@ -312,7 +313,7 @@ public class Menu
                         {
                             Console.WriteLine("Invalid option");
                         }
-                        _usersService.DeleteTask(user.Id, taskId);
+                        _usersService.DeleteTask(userDTO.User.Id, taskId);
                     }
                     catch (Exception ex)
                     {
@@ -328,7 +329,7 @@ public class Menu
                             Console.WriteLine("Invalid option");
                         }
                         AA1.Models.Task task = _taskService.CompleteTask(taskId);
-                        _usersService.GainXp(user.Id, task.Xp);
+                        _usersService.GainXp(userDTO.User.Id, task.Xp);
                         //wip - add gold
                         Console.WriteLine($"Task completed: {task.Title}");
                         Console.WriteLine($"XP gained: {task.Xp}");

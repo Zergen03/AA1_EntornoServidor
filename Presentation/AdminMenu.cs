@@ -2,7 +2,7 @@ using AA1.Models;
 using AA1.Data;
 using AA1.Services;
 
-namespace AA1.Menu;
+namespace AA1.Presentation;
 
 public class AdminMenu
 {

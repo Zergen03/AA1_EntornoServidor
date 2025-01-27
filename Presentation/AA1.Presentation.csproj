@@ -4,6 +4,7 @@
     <ProjectReference Include="..\AA1.DTOs\AA1.DTOs.csproj" />
     <ProjectReference Include="..\Data\AA1.Data.csproj" />
     <ProjectReference Include="..\Services\AA1.Services.csproj" />
+    <ProjectReference Include="..\Models\AA1.Models.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
