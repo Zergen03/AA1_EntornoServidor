@@ -1,27 +1,37 @@
 using AA1.Models;
 using AA1.Data;
+using AA1.DTOs;
 
 namespace AA1.Services;
 
 public class UsersService : IUsersService
 {
     private readonly IUsersRepository _repository;
-    public UsersService(IUsersRepository repository)
+    private readonly ITaskService _taskService;
+    public UsersService(IUsersRepository repository, ITaskService taskService)
     {
         _repository = repository;
+        _taskService = taskService;
     }
 
-    public Users Login(string _name, string _password)
+    public LoginResultDTO Login(string _name, string _password)
     {
         Users? user = _repository.GetUserByName(_name);
         if (user == null || user.password != _password)
         {
             throw new System.Exception("User or password incorrect");
         }
-        return user;
+        int _damageTaken = CheckExpiredTasks(user);
+        LoginResultDTO loginResult = new LoginResultDTO
+        {
+            User = user,
+            RemainingLife = user.life,
+            DamageTaken = _damageTaken
+        };
+        return loginResult;
     }
 
-    public Users Register(string _name, string _password)
+    public LoginResultDTO Register(string _name, string _password)
     {
         if (_repository.GetUserByName(_name) == null)
         {
@@ -194,7 +204,7 @@ public class UsersService : IUsersService
             throw new System.Exception(e.Message);
         }
     }
-    public Users TakeDamage(int id, int damage)
+    private Users TakeDamage(int id, int damage)
     {
         Users user = _repository.GetUserById(id);
         user.life -= damage;
@@ -216,9 +226,10 @@ public class UsersService : IUsersService
         {
             user = LevelUp(id);
             user.xp = user.xp + xp - (int)nextLevel;
-        }else
+        }
+        else
         {
-        user.xp += xp;
+            user.xp += xp;
         }
         _repository.UpdateUser(id, user);
         return user;
@@ -236,5 +247,21 @@ public class UsersService : IUsersService
         user.gold += gold;
         _repository.UpdateUser(id, user);
         return user;
+    }
+
+    private int CheckExpiredTasks(Users user)
+    {
+        int damage = 0;
+        foreach (var task in user.Tasks)
+        {
+            AA1.Models.Task taskToCheck = _taskService.GetTaskById(task.Key);
+            if (_taskService.IsTaskExpired(taskToCheck.Id))
+            {
+                TakeDamage(user.Id, taskToCheck.lostLife);
+                damage += taskToCheck.lostLife;
+                user.Tasks.Remove(task.Key);
+            }
+        }
+        return damage;
     }
 }

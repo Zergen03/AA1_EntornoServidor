@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Data\AA1.Data.csproj" />
-    <ProjectReference Include="..\Models\AA1.Models.csproj" />
     <ProjectReference Include="..\AA1.DTOs\AA1.DTOs.csproj" />
+    <ProjectReference Include="..\Data\AA1.Data.csproj" />
+    <ProjectReference Include="..\Services\AA1.Services.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
