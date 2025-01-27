@@ -148,6 +148,7 @@ public class Menu
             if (!int.TryParse(Console.ReadLine(), out option))
             {
                 Console.WriteLine("Invalid option");
+                option = -1;
                 continue;
             }
 
@@ -166,7 +167,7 @@ public class Menu
                     Console.WriteLine("Invalid option");
                     break;
             }
-        } while (int.TryParse(Console.ReadLine(), out option) && option != 0);
+        } while (option != 0);
     }
 
     private void InventoryMenu(LoginResultDTO userDTO)
@@ -179,6 +180,7 @@ public class Menu
             if (!int.TryParse(Console.ReadLine(), out option))
             {
                 Console.WriteLine("Invalid option");
+                option = -1;
                 continue;
             }
             switch (option)
@@ -239,7 +241,7 @@ public class Menu
                     Console.WriteLine("Invalid option");
                     break;
             }
-        } while (int.TryParse(Console.ReadLine(), out option) && option != 0);
+        } while (option != 0);
     }
 
     private void TaskMenu(LoginResultDTO userDTO)
@@ -252,12 +254,14 @@ public class Menu
             if (!int.TryParse(Console.ReadLine(), out option))
             {
                 Console.WriteLine("Invalid option");
+                option = -1;
                 continue;
             }
+            Console.WriteLine("_________________________");
 
             switch (option)
             {
-                case 1:
+                case 1: // Show tasks
                     try
                     {
                         Console.WriteLine("Tasks:\n-------------------");
@@ -273,7 +277,7 @@ public class Menu
                         continue;
                     }
                     break;
-                case 2:
+                case 2: // View task
                     try
                     {
                         Console.WriteLine("Select task to view");
@@ -289,7 +293,7 @@ public class Menu
                         Console.WriteLine($"Error viewing task: {ex.Message}");
                     }
                     break;
-                case 3:
+                case 3: // Add task
                     try
                     {
                         Console.WriteLine("Enter task title");
@@ -328,7 +332,7 @@ public class Menu
                         Console.WriteLine($"Error creating task: {ex.Message}");
                     }
                     break;
-                case 4:
+                case 4: // Delete task
                     try
                     {
                         Console.WriteLine("Select task to delete");
@@ -367,7 +371,7 @@ public class Menu
                     Console.WriteLine("Invalid option");
                     break;
             }
-        } while (int.TryParse(Console.ReadLine(), out option) && option != 0);
+        } while (option != 0);
     }
 
 }

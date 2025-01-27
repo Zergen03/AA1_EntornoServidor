@@ -13,7 +13,9 @@
             "args": [],
             "cwd": "${workspaceFolder}",
             "env": {
-                "USERS_JSON_PATH": "${workspaceFolder}/ddbb/Users.json"
+                "USERS_JSON_PATH": "${workspaceFolder}/ddbb/Users.json",
+                "TASKS_JSON_PATH": "${workspaceFolder}/ddbb/Tasks.json",
+                "ITEMS_JSON_PATH": "${workspaceFolder}/ddbb/Items.json"
             },
         }
     ]

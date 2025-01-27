@@ -6,7 +6,7 @@ namespace AA1.Data;
 public class ItemsRepository : IItemsRepository
 {
     private Dictionary<int, Items> _items = new Dictionary<int, Items>();
-    private readonly string _filePath = Environment.GetEnvironmentVariable("USERS_JSON_PATH") ?? "ddbb/Items.json";
+    private readonly string _filePath = Environment.GetEnvironmentVariable("ITEMS_JSON_PATH") ?? "./ddbb/Items.json";
 
     public ItemsRepository()
     {
