@@ -32,6 +32,7 @@ public class Menu
         Console.WriteLine("1) Inventory");
         Console.WriteLine("2) Tasks");
         Console.WriteLine("3) Stats");
+        Console.WriteLine("4) Go to Shop");
         Console.WriteLine("0) Exit");
     }
 
@@ -50,6 +51,13 @@ public class Menu
         Console.WriteLine("3) Add task");
         Console.WriteLine("4) Delete task");
         Console.WriteLine("5) Complete task");
+        Console.WriteLine("0) Exit");
+    }
+    private void showShopMenu()
+    {
+        Console.WriteLine("1) Show Shop");
+        Console.WriteLine("2) View item");
+        Console.WriteLine("3) Buy item");
         Console.WriteLine("0) Exit");
     }
 
@@ -162,6 +170,9 @@ public class Menu
                     break;
                 case 3:
                     userDTO.ToString();
+                    break;
+                case 4:
+                    ShopMenu(userDTO);
                     break;
                 default:
                     Console.WriteLine("Invalid option");
@@ -377,6 +388,88 @@ public class Menu
                     catch (Exception ex)
                     {
                         Console.WriteLine($"Error completing task: {ex.Message}");
+                    }
+                    break;
+                default:
+                    Console.WriteLine("Invalid option");
+                    break;
+            }
+        } while (option != 0);
+    }
+
+    public void ShopMenu(LoginResultDTO userDTO)
+    {
+        int option;
+        Dictionary<int, int> itemMapping = new Dictionary<int, int>();
+        Dictionary<int, Items> itemsToMap = _itemsService.GetItems();
+        int index = 1;
+        foreach (var item in itemsToMap)
+        {
+            itemMapping.Add(index, item.Key);
+            index++;
+        }
+        do
+        {
+            showShopMenu();
+            if (!int.TryParse(Console.ReadLine(), out option))
+            {
+                Console.WriteLine("Invalid option");
+                option = -1;
+                continue;
+            }
+            switch (option)
+            {
+                case 1: // Show shop
+                    try
+                    {
+                        Console.WriteLine("Items:\n-------------------");
+                        Dictionary<int, Items> shopItems = _itemsService.GetItems();
+                        index = 1;
+                        foreach (var item in shopItems)
+                        {
+                            Console.WriteLine($"{index} - {item.Value.Name}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error retrieving items: {ex.Message}");
+                        continue;
+                    }
+                    break;
+                case 2: // View item
+                    try
+                    {
+                        Console.WriteLine("Select item to view");
+                        if (!int.TryParse(Console.ReadLine(), out int itemId))
+                        {
+                            Console.WriteLine("Invalid option");
+                        }
+                        int mappedItemId = itemMapping[itemId];
+                        Items item = _itemsService.GetItemById(mappedItemId);
+                        Console.WriteLine(item.ToString());
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error viewing item: {ex.Message}");
+                        continue;
+                    }
+                    break;
+                case 3: // Buy item
+                    try
+                    {
+                        Console.WriteLine("Select item to buy");
+                        if (!int.TryParse(Console.ReadLine(), out int itemId))
+                        {
+                            Console.WriteLine("Invalid option");
+                        }
+                        Items item = _itemsService.GetItemById(itemId);
+                        _usersService.BuyItem(userDTO.User.Id, item);
+                        Console.WriteLine($"Item bought: {item.Name}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error buying item: {ex.Message}");
+                        continue;
                     }
                     break;
                 default:
