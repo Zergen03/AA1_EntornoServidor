@@ -107,22 +107,21 @@ public class UsersService : IUsersService
             throw new System.Exception(e.Message);
         }
     }
-    public Users AddItemToInventory(int id, Items item)
+    public Users BuyItem(int id, Items item)
     {
-        try
+        Users user = _repository.GetUserById(id);
+        if (user.gold < item.Value)
         {
-            Users user = _repository.GetUserById(id);
-            if (item == null)
-            {
-                throw new System.Exception("Invalid item");
-            }
-            user.items.Add(item.Id, item.Name);
-            return _repository.UpdateUser(id, user);
+            throw new System.Exception("Not enough gold");
         }
-        catch (Exception e)
+        if (item == null)
         {
-            throw new System.Exception(e.Message);
+            throw new System.Exception("Invalid item");
         }
+        user.gold -= item.Value;
+        user.items.Add(item.Id, item.Name);
+        _repository.UpdateUser(id, user);
+        return user;
     }
     public Dictionary<int, string> GetInventory(int id)
     {
