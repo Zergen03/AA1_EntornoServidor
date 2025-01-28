@@ -8,6 +8,6 @@ public interface IItemsService
     Dictionary<int, Items> GetItems();
     Items GetItemById(int id);
     void DeleteItem(int id);
-    void filterItemsByType(string type);
-    void filterItemsByStat(string stat);
+    Dictionary<int, Items> filterItemsByType(string type);
+    Dictionary<int, Items> filterItemsByStat(string stat);
 }

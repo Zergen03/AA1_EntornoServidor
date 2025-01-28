@@ -44,6 +44,11 @@ public class Items{
 
     public override string ToString()
     {
-        return $"Name: {Name},\nValue: {Value},\nType: {Type},\n{Stats}";   
+        string statsList = "";
+        foreach (var stat in Stats)
+        {
+            statsList += $"{stat.Key}: {stat.Value}\n";
+        }
+        return $"Name: {Name},\nValue: {Value},\nType: {Type},\nStats:\n{statsList}";   
     }
 }

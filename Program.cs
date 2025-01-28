@@ -13,13 +13,16 @@ services.AddTransient<IItemsService, ItemsService>();
 services.AddSingleton<ITaskRepository, TaskRepository>();
 services.AddTransient<ITaskService, TaskService>();
 services.AddSingleton<Menu>();
+services.AddSingleton<AdminMenu>();
 
 var serviceProvider = services.BuildServiceProvider();
 var UsersRepository = serviceProvider.GetService<IUsersRepository>();
 var UsersService = serviceProvider.GetService<IUsersService>();
 var Menu = serviceProvider.GetService<Menu>();
+var AdminMenu = serviceProvider.GetService<AdminMenu>();
 
 Menu.MainMenu();
+AdminMenu.ShowAdminMenu();
 
 
 // try{

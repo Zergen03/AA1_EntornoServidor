@@ -19,7 +19,7 @@ public class AdminMenu
         _taskService = taskService;
     }
 
-    private void ManinMenu()
+    private void MainMenu()
     {
         Console.WriteLine("1) Create item");
         Console.WriteLine("2) Delete item");
@@ -28,12 +28,12 @@ public class AdminMenu
         Console.WriteLine("0) Exit");
     }
 
-    private void ShowMenu()
+    public void ShowAdminMenu()
     {
         int option;
         do
         {
-            ManinMenu();
+            MainMenu();
             if (!int.TryParse(Console.ReadLine(), out option))
             {
                 Console.WriteLine("Invalid option");
@@ -75,6 +75,7 @@ public class AdminMenu
                             }
                             Console.WriteLine("Value: ");
                             int.TryParse(Console.ReadLine(), out int modifierValue);
+                            stats.Add(modifier, modifierValue);
                         } while (true);
                         _itemsService.CreateItem(name, value, type, stats);
                     }

@@ -3,6 +3,7 @@ using AA1.Data;
 using AA1.Services;
 using AA1.DTOs;
 
+
 namespace AA1.Presentation;
 public class Menu
 {
@@ -11,6 +12,7 @@ public class Menu
     private readonly IUsersService _usersService;
     private readonly IItemsService _itemsService;
     private readonly ITaskService _taskService;
+    private readonly AdminMenu _adminMenu;
 
     public Menu(IUsersRepository usersRepository, IUsersService usersService, IItemsService itemsService, ITaskService taskService)
     {
@@ -60,9 +62,18 @@ public class Menu
         Console.WriteLine("3) Buy item");
         Console.WriteLine("0) Exit");
     }
+    private void filterMenu()
+    {
+        Console.WriteLine("1) Show All");
+        Console.WriteLine("2) Filter by type");
+        Console.WriteLine("3) Filter by stat");
+        Console.WriteLine("0) Exit");
+    }
 
     public void MainMenu()
     {
+        
+        // _adminMenu.ShowMenu();
         int option;
         do
         {
@@ -422,12 +433,87 @@ public class Menu
                 case 1: // Show shop
                     try
                     {
-                        Console.WriteLine("Items:\n-------------------");
-                        Dictionary<int, Items> shopItems = _itemsService.GetItems();
-                        index = 1;
-                        foreach (var item in shopItems)
+                        filterMenu();
+                        if (!int.TryParse(Console.ReadLine(), out int filterOption))
                         {
-                            Console.WriteLine($"{index} - {item.Value.Name}");
+                            Console.WriteLine("Invalid option");
+                            filterOption = -1;
+                            continue;
+                        }
+                        List<string> types = new List<string> { "Weapon", "Helmet", "Chestplate", "Boots", "Gloves", "Leggins" };
+                        List<string> modifiers = new List<string> { "MaxHP", "XPreward", "GoldReward", "Heal" };
+                        Console.WriteLine("Items:\n-------------------");
+                        switch (filterOption)
+                        {
+                            case 1: // Show all
+                                try
+                                {
+                                    Dictionary<int, Items> shopItems = _itemsService.GetItems();
+                                    index = 1;
+                                    foreach (var item in shopItems)
+                                    {
+                                        Console.WriteLine($"{index} - {item.Value.Name}");
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"Error retrieving items: {ex.Message}");
+                                    continue;
+                                }
+                                break;
+                            case 2: // Filter by type
+                                try
+                                {
+                                    Console.WriteLine("Enter type to filter\n(Weapon, Helmet, Chestplate, Boots, Gloves, Leggins)");
+                                    string type = Console.ReadLine();
+                                    if (!types.Contains(type))
+                                    {
+                                        throw new ArgumentException("Type not found");
+                                    }
+                                    Dictionary<int, Items> filterItems = _itemsService.filterItemsByType(type);
+                                    foreach (var item in filterItems)
+                                    {
+                                        if (itemMapping.ContainsValue(item.Key))
+                                        {
+                                            int key = itemMapping.FirstOrDefault(i => i.Value == item.Key).Key;
+                                            Console.WriteLine($"{key} - {item.Value.Name}");
+                                        }
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"Error retrieving items: {ex.Message}");
+                                    continue;
+                                }
+                                break;
+                            case 3: // Filter by stat
+                                try
+                                {
+                                    Console.WriteLine("Enter stat to filter\n(MaxHP, XpReward, GoldReward, Heal)");
+                                    string stat = Console.ReadLine();
+                                    if (!modifiers.Contains(stat))
+                                    {
+                                        throw new ArgumentException("Type not found");
+                                    }
+                                    Dictionary<int, Items> filterItems = _itemsService.filterItemsByStat(stat);
+                                    foreach (var item in filterItems)
+                                    {
+                                        if (itemMapping.ContainsValue(item.Key))
+                                        {
+                                            int key = itemMapping.FirstOrDefault(i => i.Value == item.Key).Key;
+                                            Console.WriteLine($"{key} - {item.Value.Name}");
+                                        }
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"Error retrieving items: {ex.Message}");
+                                    continue;
+                                }
+                                break;
+                            default:
+                                Console.WriteLine("Invalid option");
+                                break;
                         }
                     }
                     catch (Exception ex)

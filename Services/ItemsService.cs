@@ -63,25 +63,37 @@ public class ItemsService : IItemsService
         _itemsRepository.DeleteItem(id);
     }
 
-    public void filterItemsByType(string type)
+    public Dictionary<int, Items> filterItemsByType(string type)
     {
+        Dictionary<int, Items> items = new Dictionary<int, Items>();
         foreach (Items item in _itemsRepository.GetItems())
         {
             if (item.Type == type)
             {
-                Console.WriteLine(item.ToString());
+                items.Add(item.Id, item);
             }
         }
+        if (items.Count == 0 || items == null)
+        {
+            throw new System.Exception("No items found");
+        }
+        return items;
     }
 
-    public void filterItemsByStat(string stat)
+    public Dictionary<int, Items> filterItemsByStat(string stat)
     {
+        Dictionary<int, Items> items = new Dictionary<int, Items>();
         foreach (Items item in _itemsRepository.GetItems())
         {
             if (item.Stats.ContainsKey(stat))
             {
-                Console.WriteLine(item.ToString());
+                items.Add(item.Id, item);
             }
         }
+        if (items.Count == 0 || items == null)
+        {
+            throw new System.Exception("No items found");
+        }
+        return items;
     }
 }
