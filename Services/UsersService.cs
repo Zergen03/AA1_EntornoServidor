@@ -48,6 +48,15 @@ public class UsersService : IUsersService
         return Login(_name, _password);
     }
 
+    public void DeleteUser(int id)
+    {
+        if (_repository.GetUserById(id) == null)
+        {
+            throw new System.Exception("User not found");
+        }
+        _repository.DeleteUser(id);
+    }
+
     public Users AddTask(int id, AA1.Models.Task task)
     {
         try

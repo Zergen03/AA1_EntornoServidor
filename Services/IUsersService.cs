@@ -7,6 +7,7 @@ public interface IUsersService
 {
     LoginResultDTO Login(string name, string password);
     LoginResultDTO Register(string name, string password);
+    void DeleteUser(int id);
     Users AddTask(int id, AA1.Models.Task task);
     Dictionary<int, string> GetTasks(int id);
     Users DeleteTask(int id, int taskId);

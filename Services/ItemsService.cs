@@ -54,6 +54,15 @@ public class ItemsService : IItemsService
         return item;
     }
 
+    public void DeleteItem(int id)
+    {
+        if (_itemsRepository.GetItemById(id) == null)
+        {
+            throw new System.Exception("Item not found");
+        }
+        _itemsRepository.DeleteItem(id);
+    }
+
     public void filterItemsByType(string type)
     {
         foreach (Items item in _itemsRepository.GetItems())
