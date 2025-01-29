@@ -2,3 +2,4 @@ bin/
 obj/
 ddbb/*
 !ddbb/.gitkeep
+.env
