@@ -2,12 +2,14 @@ using AA1.Models;
 using AA1.Data;
 using AA1.Services;
 using AA1.DTOs;
+using System;
+using System.Collections;
+using System.IO;
 
 
 namespace AA1.Presentation;
 public class Menu
 {
-
     private readonly IUsersRepository _usersRepository;
     private readonly IUsersService _usersService;
     private readonly IItemsService _itemsService;
@@ -73,7 +75,7 @@ public class Menu
 
     public void MainMenu()
     {
-        
+
         _adminMenu.ShowAdminMenu();
         int option;
         do

@@ -1,4 +1,5 @@
 using AA1.Models;
+using Data;
 using System.Text.Json;
 
 namespace AA1.Data;
@@ -7,11 +8,15 @@ class UsersRepository : IUsersRepository
 {
 
     private Dictionary<int, Users> _users = new Dictionary<int, Users>();
-    private readonly string _filePath = Environment.GetEnvironmentVariable("USERS_JSON_PATH") ?? "./ddbb/Users.json";
-
+    private readonly string _filePath;
 
     public UsersRepository()
     {
+        _filePath = Config.Get("USERS_JSON_PATH");
+        if (string.IsNullOrEmpty(_filePath))
+        {
+            throw new Exception("Environment variable 'USERS_JSON_PATH' not found or empty.");
+        }
         LoadUsers();
     }
 
@@ -36,7 +41,7 @@ class UsersRepository : IUsersRepository
     }
 
     public Users CreateUser(Users user)
-    {   
+    {
         _users.Add(user.Id, user);
         SaveChanges();
         return user;
@@ -62,7 +67,7 @@ class UsersRepository : IUsersRepository
         {
             if (!File.Exists(_filePath))
             {
-                return;
+                throw new Exception("File not found");
             }
             string jsonString = File.ReadAllText(_filePath);
             if (string.IsNullOrEmpty(jsonString))

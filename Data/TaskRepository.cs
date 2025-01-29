@@ -1,4 +1,5 @@
 using AA1.Models;
+using Data;
 using System.Text.Json;
 
 namespace AA1.Data;
@@ -6,10 +7,15 @@ namespace AA1.Data;
 public class TaskRepository : ITaskRepository
 {
     private Dictionary<int, AA1.Models.Task> _tasks = new Dictionary<int, AA1.Models.Task>();
-    private readonly string _filePath = Environment.GetEnvironmentVariable("TASKS_JSON_PATH") ?? "./ddbb/Tasks.json";
+    private readonly string _filePath;
 
     public TaskRepository()
     {
+        _filePath = Config.Get("TASKS_JSON_PATH");
+        if (string.IsNullOrEmpty(_filePath))
+        {
+            throw new Exception("Environment variable 'TASK_JSON_PATH' not found or empty.");
+        }
         LoadTasks();
     }
 
@@ -54,7 +60,7 @@ public class TaskRepository : ITaskRepository
         {
             if (!File.Exists(_filePath))
             {
-                return;
+                throw new Exception("File not found");
             }
             string jsonString = File.ReadAllText(_filePath);
             if (string.IsNullOrEmpty(jsonString))

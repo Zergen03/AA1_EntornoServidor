@@ -1,4 +1,5 @@
 using AA1.Models;
+using Data;
 using System.Text.Json;
 
 namespace AA1.Data;
@@ -6,10 +7,15 @@ namespace AA1.Data;
 public class ItemsRepository : IItemsRepository
 {
     private Dictionary<int, Items> _items = new Dictionary<int, Items>();
-    private readonly string _filePath = Environment.GetEnvironmentVariable("ITEMS_JSON_PATH") ?? "./ddbb/Items.json";
+    private readonly string _filePath;
 
     public ItemsRepository()
     {
+        _filePath = Config.Get("ITEMS_JSON_PATH");
+        if (string.IsNullOrEmpty(_filePath))
+        {
+            throw new Exception("Environment variable 'ITEMS_JSON_PATH' not found or empty.");
+        }
         LoadItems();
     }
 
@@ -55,7 +61,7 @@ public class ItemsRepository : IItemsRepository
         {
             if (!File.Exists(_filePath))
             {
-                return;
+                throw new Exception("File not found");
             }
             string jsonString = File.ReadAllText(_filePath);
             if (string.IsNullOrEmpty(jsonString))
