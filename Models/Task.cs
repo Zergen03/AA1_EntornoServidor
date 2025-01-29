@@ -19,9 +19,9 @@ public class Task
         Id = _seed;
         Title = _title;
         Description = _description;
-        Xp = CalculateXp();
-        Gold = CalculateGold();
-        lostLife = CalculateLostLife();
+        Xp = CalculateXp(_difficulty);
+        Gold = CalculateGold(_difficulty);
+        lostLife = CalculateLostLife(_difficulty);
         difficulty = checkDifficulty(_difficulty);
         ExpirationDate = _lostTime;
         IncraseSeed();
@@ -45,21 +45,21 @@ public class Task
         return $"Title: {Title},\nDescription: {Description},\nDifficulty: {difficulty},\nExpiration Date: {ExpirationDate?.ToString() ?? "0"}";
     }
 
-    private int CalculateGold()
+    private int CalculateGold(int difficulty = 1)
     {
         Random random = new Random();
         int _gold = random.Next(1, 5) * difficulty;
         return _gold;
     }
 
-    private int CalculateXp()
+    private int CalculateXp(int difficulty = 1)
     {
         Random random = new Random();
         int _xp = random.Next(5, 20) * difficulty;
         return _xp;
     }
 
-    private int CalculateLostLife()
+    private int CalculateLostLife(int difficulty = 1)
     {
         Random random = new Random();
         int _lostLife = random.Next(1, 5) * difficulty;

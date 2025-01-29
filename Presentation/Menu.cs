@@ -6,11 +6,14 @@ using System;
 using System.Collections;
 using System.IO;
 using Data;
+using NLog;
+using Spectre.Console;
 
 
 namespace AA1.Presentation;
 public class Menu
 {
+    private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     private readonly Dictionary<string, string> admin = new Dictionary<string, string>();
     private readonly IUsersRepository _usersRepository;
     private readonly IUsersService _usersService;
@@ -30,43 +33,64 @@ public class Menu
 
     private void ShowMainMenu()
     {
-        Console.WriteLine("1) Login");
-        Console.WriteLine("2) Register");
-        Console.WriteLine("0) Exit");
+        AnsiConsole.Clear();
+
+        AnsiConsole.Write(
+            new FigletText("Main Menu")
+                .Centered()
+                .Color(Color.Green));
+
+        AnsiConsole.MarkupLine("[bold]Use arrow keys to navigate and [green]ENTER[/] to select.[/]");
     }
 
     private void ShowUserMenu()
     {
-        Console.WriteLine("1) Inventory");
-        Console.WriteLine("2) Tasks");
-        Console.WriteLine("3) Stats");
-        Console.WriteLine("4) Go to Shop");
-        Console.WriteLine("0) Exit");
+        Console.Clear();
+
+        AnsiConsole.Write(
+            new FigletText("User Menu")
+                .Centered()
+                .Color(Color.Blue));
+
+        AnsiConsole.MarkupLine("[bold]Use arrow keys to navigate and [green]ENTER[/] to select.[/]");
     }
+
 
     private void ShowInventoryMenu()
     {
-        Console.WriteLine("1) Show inventory");
-        Console.WriteLine("2) Equip item");
-        Console.WriteLine("3) Unequip item");
-        Console.WriteLine("0) Exit");
+        Console.Clear();
+
+        AnsiConsole.Write(
+            new FigletText("Inventory")
+                .Centered()
+                .Color(Color.Blue));
+
+        AnsiConsole.MarkupLine("[bold]Use arrow keys to navigate and [green]ENTER[/] to select.[/]");
     }
 
     private void ShowTaskMenu()
     {
-        Console.WriteLine("1) Show tasks");
-        Console.WriteLine("2) View task");
-        Console.WriteLine("3) Add task");
-        Console.WriteLine("4) Delete task");
-        Console.WriteLine("5) Complete task");
-        Console.WriteLine("0) Exit");
+        Console.Clear();
+
+        AnsiConsole.Write(
+            new FigletText("Tasks")
+                .Centered()
+                .Color(Color.Blue));
+
+        AnsiConsole.MarkupLine("[bold]Use arrow keys to navigate and [green]ENTER[/] to select.[/]");
+
     }
     private void showShopMenu()
     {
-        Console.WriteLine("1) Show Shop");
-        Console.WriteLine("2) View item");
-        Console.WriteLine("3) Buy item");
-        Console.WriteLine("0) Exit");
+        Console.Clear();
+
+        AnsiConsole.Write(
+            new FigletText("Shop")
+                .Centered()
+                .Color(Color.Blue));
+
+        AnsiConsole.MarkupLine("[bold]Use arrow keys to navigate and [green]ENTER[/] to select.[/]");
+
     }
     private void filterMenu()
     {
@@ -82,12 +106,13 @@ public class Menu
         do
         {
             ShowMainMenu();
-            if (!int.TryParse(Console.ReadLine(), out option))
-            {
-                Console.WriteLine("Invalid option");
-                option = -1;
-                continue;
-            }
+
+            var choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("[bold yellow]Select an option:[/]")
+                    .AddChoices("1) Login", "2) Register", "0) Exit"));
+
+            option = int.Parse(choice[0].ToString());
 
             switch (option)
             {
@@ -97,66 +122,59 @@ public class Menu
                 case 2:
                     Register();
                     break;
+                case 0:
+                    AnsiConsole.MarkupLine("[bold green]Exiting...[/]");
+                    break;
                 default:
-                    Console.WriteLine("Invalid option");
+                    AnsiConsole.MarkupLine("[bold red]Invalid option[/]");
                     break;
             }
+
         } while (option != 0);
     }
-
     private void Login()
     {
-        Console.WriteLine("Enter your name");
-        string? name = Console.ReadLine();
-        if (string.IsNullOrEmpty(name))
+        AnsiConsole.Clear();
+
+        AnsiConsole.MarkupLine("[bold yellow]--- Login ---[/]");
+
+        string name = AnsiConsole.Prompt(
+            new TextPrompt<string>("[bold]Enter your name:[/]"));
+
+        string password = AnsiConsole.Prompt(
+            new TextPrompt<string>("[bold]Enter your password:[/]")
+                .Secret());
+
+        if (admin.ContainsKey(name) && admin[name] == password)
         {
-            Console.WriteLine("Invalid name");
+            _adminMenu.ShowAdminMenu();
             return;
         }
-        Console.WriteLine("Enter your password");
-        string? password = Console.ReadLine();
-        if (string.IsNullOrEmpty(password))
+        else
         {
-            Console.WriteLine("Invalid password");
-            return;
+            LoginResultDTO userDTO = _usersService.Login(name, password);
+            MenuUser(userDTO);
         }
 
-        try
-        {
-            if (admin.ContainsKey(name) && admin[name] == password)
-            {
-                _adminMenu.ShowAdminMenu();
-                return;
-            }
-            else
-            {
-                LoginResultDTO userDTO = _usersService.Login(name, password);
-                MenuUser(userDTO);
-            }
-        }
-        catch (System.Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            MainMenu();
-        }
+        AnsiConsole.MarkupLine("\n[bold]Press any key to return to the main menu...[/]");
+        Console.ReadKey(true);
+
+        MainMenu();
     }
+
 
     private void Register()
     {
-        Console.WriteLine("Enter your name");
-        string? name = Console.ReadLine();
-        if (string.IsNullOrEmpty(name))
-        {
-            Console.WriteLine("Invalid name");
-            return;
-        }
-        Console.WriteLine("Enter your password");
-        string? password = Console.ReadLine();
-        if (string.IsNullOrEmpty(password))
-        {
-            Console.WriteLine("Invalid password");
-            return;
-        }
+        AnsiConsole.Clear();
+
+        AnsiConsole.MarkupLine("[bold yellow]--- Register ---[/]");
+
+        string name = AnsiConsole.Prompt(
+            new TextPrompt<string>("[bold]Enter your name:[/]"));
+
+        string password = AnsiConsole.Prompt(
+            new TextPrompt<string>("[bold]Enter your password:[/]")
+                .Secret());
 
         try
         {
@@ -164,28 +182,34 @@ public class Menu
             {
                 throw new Exception("Not allowed to register as 'admin'");
             }
+
             LoginResultDTO userDTO = _usersService.Register(name, password);
             MenuUser(userDTO);
         }
         catch (System.Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            logger.Warn(ex.Message);
+            AnsiConsole.MarkupLine($"[bold red]{ex.Message}[/]");
+
+            AnsiConsole.MarkupLine("\n[bold]Press any key to return to the main menu...[/]");
+            Console.ReadKey(true);
+
             MainMenu();
         }
     }
-
     private void MenuUser(LoginResultDTO userDTO)
     {
         int option;
         do
         {
             ShowUserMenu();
-            if (!int.TryParse(Console.ReadLine(), out option))
-            {
-                Console.WriteLine("Invalid option");
-                option = -1;
-                continue;
-            }
+
+            var choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("[bold yellow]User Menu[/]")
+                    .AddChoices("1) Inventory", "2) Tasks", "3) Profile", "4) Shop", "0) Logout"));
+
+            option = int.Parse(choice[0].ToString());
 
             switch (option)
             {
@@ -196,391 +220,431 @@ public class Menu
                     TaskMenu(userDTO);
                     break;
                 case 3:
-                    userDTO.ToString();
+                    Table profileTable = new Table();
+                    profileTable.AddColumn("Name");
+                    profileTable.AddColumn("HP");
+                    profileTable.AddColumn("XP");
+                    profileTable.AddColumn("Level");
+                    profileTable.AddColumn("Gold");
+
+                    profileTable.AddRow(userDTO.User.Name, userDTO.User.life.ToString(), userDTO.User.xp.ToString(), userDTO.User.level.ToString(), userDTO.User.gold.ToString());
+                    AnsiConsole.Write(new Panel(profileTable)
+                        .Header("[bold cyan]Profile[/]")
+                        .Border(BoxBorder.Rounded)
+                        .Expand());
+
+                    AnsiConsole.MarkupLine("\n[bold]Press any key to return...[/]");
+                    Console.ReadKey(true);
+
+
                     break;
                 case 4:
                     ShopMenu(userDTO);
                     break;
+                case 0:
+                    AnsiConsole.MarkupLine("[bold green]Logging out...[/]");
+                    break;
                 default:
-                    Console.WriteLine("Invalid option");
+                    AnsiConsole.MarkupLine("[bold red]Invalid option[/]");
                     break;
             }
+
         } while (option != 0);
     }
-
     private void InventoryMenu(LoginResultDTO userDTO)
     {
-        int option;
-        int itemId;
-        do
+        while (true)
         {
-            ShowInventoryMenu();
-            if (!int.TryParse(Console.ReadLine(), out option))
+            try
             {
-                Console.WriteLine("Invalid option");
-                option = -1;
-                continue;
-            }
-            switch (option)
-            {
-                case 1:
-                    try
-                    {
-                        Console.WriteLine("Unequiped items:\n-------------------");
-                        Dictionary<int, string> inventory = _usersService.GetInventory(userDTO.User.Id);
-                        foreach (var item in inventory)
-                        {
-                            Console.WriteLine($"{item.Key} - {item.Value}");
-                        }
-                        Console.WriteLine("Equiped items:\n-------------------");
-                        Dictionary<int, string> equippedItems = _usersService.GetEquippedItems(userDTO.User.Id);
-                        foreach (var item in equippedItems)
-                        {
-                            Console.WriteLine($"{item.Key} - {item.Value}");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error retrieving inventory: {ex.Message}");
-                    }
+                ShowInventoryMenu();
+                Dictionary<int, string> inventory;
+                try
+                {
+                    inventory = _usersService.GetInventory(userDTO.User.Id) ?? new Dictionary<int, string>();
+                }
+                catch (Exception ex)
+                {
+                    logger.Warn(ex.Message);
+                    inventory = new Dictionary<int, string>();
+                }
+
+                Dictionary<int, string> equippedItems;
+                try
+                {
+                    equippedItems = _usersService.GetEquippedItems(userDTO.User.Id);
+                }
+                catch (Exception ex)
+                {
+                    logger.Warn(ex.Message);
+                    equippedItems = new Dictionary<int, string>();
+                }
+
+                if (inventory.Count == 0 && equippedItems.Count == 0)
+                {
+                    AnsiConsole.MarkupLine("[bold red]Your inventory is empty.[/]");
+                    AnsiConsole.MarkupLine("[bold]Press any key to return...[/]");
+                    Console.ReadKey(true);
                     break;
-                case 2:
-                    try
+                }
+
+                var menuItems = new List<string>();
+
+                if (equippedItems.Count > 0)
+                {
+                    menuItems.Add("[bold green]--- Equipped Items ---[/]");
+                    foreach (var item in equippedItems)
                     {
-                        Console.WriteLine("Select item to equip");
-                        if (!int.TryParse(Console.ReadLine(), out itemId))
-                        {
-                            Console.WriteLine("Invalid option");
-                            continue;
-                        }
-                        _usersService.EquipItem(userDTO.User.Id, itemId);
+                        menuItems.Add($"[green]{item.Key + 1} - {item.Value}[/]");
                     }
-                    catch (Exception ex)
+                }
+
+                if (inventory.Count > 0)
+                {
+                    menuItems.Add("[bold red]--- Unequipped Items ---[/]");
+                    foreach (var item in inventory)
                     {
-                        Console.WriteLine($"Error equipping item: {ex.Message}");
+                        menuItems.Add($"[red]{item.Key + 1} - {item.Value}[/]");
                     }
+                }
+
+                menuItems.Add("[yellow]0 - Exit[/]");
+
+                var selectedItem = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("[bold yellow]Select an item to equip/unequip or view details:[/]")
+                        .PageSize(10)
+                        .AddChoices(menuItems));
+
+                string cleanSelection = selectedItem.Split(" - ")[0]
+                    .Replace("[red]", "")
+                    .Replace("[green]", "")
+                    .Replace("[yellow]", "")
+                    .Replace("[/]", "")
+                    .Trim();
+
+                if (cleanSelection == "0" || !int.TryParse(cleanSelection, out int itemId))
                     break;
-                case 3:
-                    try
+
+                itemId -= 1;
+
+                Items itemDetails = _itemsService.GetItemById(itemId);
+
+                var statsTable = new Table();
+                statsTable.AddColumn("Attribute");
+                statsTable.AddColumn("Value");
+
+                statsTable.AddRow("Type", itemDetails.Type);
+
+                foreach (var stat in itemDetails.Stats)
+                {
+                    statsTable.AddRow(stat.Key, stat.Value.ToString());
+                }
+
+                AnsiConsole.Write(new Panel(statsTable)
+                    .Header($"[bold cyan]{itemDetails.Name}[/]")
+                    .Border(BoxBorder.Rounded)
+                    .Expand());
+
+                var action = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("[bold yellow]What do you want to do?[/]")
+                        .AddChoices("Equip/Unequip", "Cancel"));
+
+                if (action == "Equip/Unequip")
+                {
+                    if (equippedItems.ContainsKey(itemId))
                     {
-                        Console.WriteLine("Select item to unequip");
-                        if (!int.TryParse(Console.ReadLine(), out itemId))
-                        {
-                            Console.WriteLine("Invalid option");
-                        }
                         _usersService.UnEquipItem(userDTO.User.Id, itemId);
                     }
-                    catch (Exception ex)
+                    else if (inventory.ContainsKey(itemId))
                     {
-                        Console.WriteLine($"Error unequipping item: {ex.Message}");
+                        _usersService.EquipItem(userDTO.User.Id, itemId);
                     }
-                    break;
-                default:
-                    Console.WriteLine("Invalid option");
-                    break;
-            }
-        } while (option != 0);
-    }
+                }
 
+                AnsiConsole.Clear();
+            }
+            catch (Exception ex)
+            {
+                logger.Warn(ex.Message);
+                AnsiConsole.MarkupLine($"[bold red]{ex.Message}[/]");
+                Console.ReadKey(true);
+                continue;
+            }
+        }
+    }
     private void TaskMenu(LoginResultDTO userDTO)
     {
         int option;
-        int taskId;
-        Dictionary<int, int> taskMapping = new Dictionary<int, int>();
-        int index = 1;
-        foreach (var task in userDTO.User.Tasks)
-        {
-            taskMapping.Add(index, task.Key);
-            index++;
-        }
         do
         {
             ShowTaskMenu();
-            if (!int.TryParse(Console.ReadLine(), out option))
-            {
-                Console.WriteLine("Invalid option");
-                option = -1;
-                continue;
-            }
-            Console.WriteLine("_________________________");
+            var choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("[bold yellow]Task Menu[/]")
+                    .AddChoices("1) Show tasks", "2) Add task", "0) Exit"));
+
+            option = int.Parse(choice[0].ToString());
 
             switch (option)
             {
                 case 1: // Show tasks
                     try
                     {
-                        Console.WriteLine("Tasks:\n-------------------");
-                        Dictionary<int, string> tasks = _usersService.GetTasks(userDTO.User.Id);
-                        index = 1;
-                        foreach (var task in tasks)
+                        Dictionary<int, string> tasksIds = _usersService.GetTasks(userDTO.User.Id);
+                        Dictionary<int, AA1.Models.Task> tasks = new Dictionary<int, AA1.Models.Task>();
+                        foreach (var _task in tasksIds)
                         {
-                            Console.WriteLine($"{index} - {task.Value}");
-                            index++;
+                            tasks.Add(_task.Key, _taskService.GetTaskById(_task.Key));
+                        }
+
+                        if (tasks.Count == 0)
+                        {
+                            AnsiConsole.MarkupLine("[bold red]No tasks available.[/]");
+                            return;
+                        }
+
+                        var choices = tasks.Select(t => $"{t.Key + 1} - {t.Value.Title}").ToList();
+                        choices.Add("[yellow]0 - Cancel[/]");
+
+                        var selectedTaskString = AnsiConsole.Prompt(
+                            new SelectionPrompt<string>()
+                                .Title("[bold yellow]Select a task to complete or delete:[/]")
+                                .PageSize(10)
+                                .AddChoices(choices));
+
+                        if (selectedTaskString.Contains("0 - Cancel"))
+                            return;
+
+                        int taskId = int.Parse(selectedTaskString.Split(" - ")[0].Trim()) - 1;
+
+                        var task = tasks[taskId];
+
+                        var taskTable = new Table();
+                        taskTable.AddColumn("Attribute");
+                        taskTable.AddColumn("Value");
+
+                        taskTable.AddRow("Title", task.Title);
+                        taskTable.AddRow("Description", task.Description);
+                        taskTable.AddRow("Difficulty", task.difficulty.ToString());
+                        taskTable.AddRow("Expiration", task.ExpirationDate?.ToString("yyyy-MM-dd") ?? "No expiration");
+
+                        AnsiConsole.Write(new Panel(taskTable)
+                            .Header($"[bold cyan]{task.Title}[/]")
+                            .Border(BoxBorder.Rounded)
+                            .Expand());
+
+                        var action = AnsiConsole.Prompt(
+                            new SelectionPrompt<string>()
+                                .Title("[bold yellow]What do you want to do?[/]")
+                                .AddChoices("Complete", "Delete", "Cancel"));
+
+                        if (action == "Complete")
+                        {
+                            _usersService.GainXp(userDTO.User.Id, task.Xp);
+                            _usersService.GainGold(userDTO.User.Id, task.Gold);
+                            _taskService.CompleteTask(taskId);
+                            _usersService.DeleteTask(userDTO.User.Id, taskId);
+                            AnsiConsole.MarkupLine($"[bold green]Task completed![/]");
+                            AnsiConsole.MarkupLine($"[bold blue]XP Gained:[/] {task.Xp}");
+                            AnsiConsole.MarkupLine($"[bold yellow]Gold Gained:[/] {task.Gold}");
+                            Console.ReadKey(true);
+
+                        }
+                        else if (action == "Delete")
+                        {
+                            bool confirm = AnsiConsole.Confirm($"[bold red]Are you sure you want to delete task '{task.Title}'?[/]");
+
+                            if (confirm)
+                            {
+                                _usersService.DeleteTask(userDTO.User.Id, taskId);
+                                _taskService.DeleteTask(taskId);
+                                AnsiConsole.MarkupLine("[bold red]Task deleted successfully.[/]");
+                            }
                         }
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Error retrieving tasks: {ex.Message}");
-                        continue;
+                        logger.Warn(ex.Message);
+                        AnsiConsole.MarkupLine($"[bold red]Error managing task: {ex.Message}[/]");
                     }
                     break;
-                case 2: // View task
+
+                case 2: // Add task
                     try
                     {
-                        Console.WriteLine("Select task to view");
-                        if (!int.TryParse(Console.ReadLine(), out taskId))
-                        {
-                            Console.WriteLine("Invalid option");
-                        }
-                        Dictionary<int, string> tasks = _usersService.GetTasks(userDTO.User.Id);
-                        int mappedTaskId = taskMapping[taskId];
-                        AA1.Models.Task task = _taskService.GetTaskById(mappedTaskId);
-                        Console.WriteLine(task.ToString());
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error viewing task: {ex.Message}");
-                    }
-                    break;
-                case 3: // Add task
-                    try
-                    {
-                        Console.WriteLine("Enter task title");
-                        string? title = Console.ReadLine();
-                        if (string.IsNullOrEmpty(title))
-                        {
-                            Console.WriteLine("Invalid name");
-                        }
-                        Console.WriteLine("Enter task description");
-                        string? description = Console.ReadLine() ?? "";
-                        Console.WriteLine("Enter task difficulty (1-5)");
-                        int difficulty;
-                        if (!int.TryParse(Console.ReadLine(), out difficulty))
-                        {
-                            Console.WriteLine("Invalid difficulty");
-                        }
-                        Console.WriteLine("Enter task expiration date (yyyy-MM-dd)");
-                        string? expirationDateString = Console.ReadLine();
+                        string title = AnsiConsole.Ask<string>("[bold]Enter task title:[/]");
+
+                        string description = AnsiConsole.Ask<string>("[bold]Enter task description:[/]", "");
+
+                        int difficulty = AnsiConsole.Prompt(
+                            new SelectionPrompt<int>()
+                                .Title("[bold]Select task difficulty (1-5):[/]")
+                                .AddChoices(1, 2, 3, 4, 5));
+
+                        string expirationInput = AnsiConsole.Ask<string>("[bold]Enter task expiration date (yyyy-MM-dd) or leave empty:[/]", "");
                         DateTime? expirationDate = null;
-                        if (!string.IsNullOrEmpty(expirationDateString))
+
+                        if (!string.IsNullOrEmpty(expirationInput) && DateTime.TryParse(expirationInput, out DateTime parsedDate))
                         {
-                            if (DateTime.TryParse(expirationDateString, out DateTime parsedDate))
-                            {
-                                expirationDate = parsedDate;
-                            }
-                            else
-                            {
-                                throw new Exception("Invalid date");
-                            }
+                            expirationDate = parsedDate;
                         }
+
                         AA1.Models.Task task = _taskService.CreateTask(title, description, difficulty, expirationDate);
                         _usersService.AddTask(userDTO.User.Id, task);
+
+                        AnsiConsole.MarkupLine("[bold green]Task created successfully![/]");
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Error creating task: {ex.Message}");
+                        logger.Warn(ex.Message);
+                        AnsiConsole.MarkupLine($"[bold red]Error creating task: {ex.Message}[/]");
                     }
-                    break;
-                case 4: // Delete task
-                    try
-                    {
-                        Console.WriteLine("Select task to delete");
-                        if (!int.TryParse(Console.ReadLine(), out taskId))
-                        {
-                            Console.WriteLine("Invalid option");
-                        }
-                        _usersService.DeleteTask(userDTO.User.Id, taskId);
-                        _taskService.DeleteTask(taskId);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error deleting task: {ex.Message}");
-                    }
-                    break;
-                case 5: // Complete task
-                    try
-                    {
-                        Console.WriteLine("Select task to complete");
-                        if (!int.TryParse(Console.ReadLine(), out taskId))
-                        {
-                            Console.WriteLine("Invalid option");
-                        }
-                        AA1.Models.Task task = _taskService.CompleteTask(taskId);
-                        _usersService.GainXp(userDTO.User.Id, task.Xp);
-                        Users fasjfa = _usersService.GainGold(userDTO.User.Id, task.Gold);
-                        Console.WriteLine($"Task completed: {task.Title}");
-                        Console.WriteLine($"XP gained: {task.Xp}");
-                        Console.WriteLine($"Gold gained: {task.Gold}");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error completing task: {ex.Message}");
-                    }
-                    break;
-                default:
-                    Console.WriteLine("Invalid option");
                     break;
             }
         } while (option != 0);
     }
-
     public void ShopMenu(LoginResultDTO userDTO)
     {
         int option;
+
+        showShopMenu();
         Dictionary<int, int> itemMapping = new Dictionary<int, int>();
         Dictionary<int, Items> itemsToMap = _itemsService.GetItems();
-        int index = 1;
-        foreach (var item in itemsToMap)
+        int index = 2;
+
+        foreach (var _item in itemsToMap)
+        {
+            itemMapping.Add(index, _item.Key);
+            index++;
+        }
+
+        while (true)
+        {
+            List<string> menuOptions = new List<string> { "1 - Filter", "0 - Exit" };
+
+            foreach (var mapping in itemMapping)
+            {
+                Items currentItem = _itemsService.GetItemById(mapping.Value);
+                menuOptions.Add($"{mapping.Key} - {currentItem.Name}");
+            }
+
+            var choice = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("[bold yellow]Shop Menu[/]")
+                    .AddChoices(menuOptions));
+
+            if (choice.Contains("0 - Exit"))
+            {
+                return;
+            }
+            if (choice.Contains("1 - Filter"))
+            {
+                itemMapping = FilterMenu();
+                continue;
+            }
+
+            int itemId = int.Parse(choice.Split(" - ")[0]);
+            Items item = _itemsService.GetItemById(itemMapping[itemId]);
+
+            var itemTable = new Table();
+            itemTable.AddColumn("Attribute");
+            itemTable.AddColumn("Value");
+
+            itemTable.AddRow("Name", item.Name);
+            itemTable.AddRow("Type", item.Type);
+            itemTable.AddRow("Value", item.Value.ToString());
+            foreach (var stat in item.Stats)
+            {
+                itemTable.AddRow(stat.Key, stat.Value.ToString());
+            }
+
+            AnsiConsole.Write(new Panel(itemTable)
+                .Header($"[bold cyan]{item.Name}[/]")
+                .Border(BoxBorder.Rounded)
+                .Expand());
+
+            var action = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("[bold yellow]What do you want to do?[/]")
+                    .AddChoices("Buy", "Cancel"));
+
+            if (action == "Buy")
+            {
+                try
+                {
+                    _usersService.BuyItem(userDTO.User.Id, item);
+                    AnsiConsole.MarkupLine($"[bold green]Item bought: {item.Name}[/]");
+                    Console.ReadKey(true);
+                }
+                catch (Exception ex)
+                {
+                    logger.Warn(ex.Message);
+                    AnsiConsole.MarkupLine($"[bold red]Error buying item: {ex.Message}[/]");
+                    Console.ReadKey(true);
+                }
+            }
+        }
+    }
+
+    private Dictionary<int, int> FilterMenu()
+    {
+        var filterType = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title("[bold yellow]Filter by:[/]")
+                .AddChoices("Type", "Stat", "Cancel"));
+
+        Dictionary<int, Items> filteredItems = new Dictionary<int, Items>();
+
+        if (filterType == "Type")
+        {
+            try
+            {
+                var type = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("[bold]Select item type:[/]")
+                        .AddChoices("Weapon", "Helmet", "Chestplate", "Boots", "Gloves", "Leggins"));
+
+                filteredItems = _itemsService.filterItemsByType(type);
+            }
+            catch (Exception ex)
+            {
+                AnsiConsole.MarkupLine($"[bold red]{ex.Message}[/]");
+                Console.ReadKey(true);
+
+            }
+        }
+        else if (filterType == "Stat")
+        {
+            try
+            {
+                var stat = AnsiConsole.Prompt(
+                    new SelectionPrompt<string>()
+                        .Title("[bold]Select stat to filter:[/]")
+                        .AddChoices("MaxHP", "XpReward", "GoldReward", "Heal"));
+
+                filteredItems = _itemsService.filterItemsByStat(stat);
+            }
+            catch (Exception ex)
+            {
+                AnsiConsole.MarkupLine($"[bold red]{ex.Message}[/]");
+                Console.ReadKey(true);
+            }
+        }
+        else
+        {
+            return _itemsService.GetItems().ToDictionary(i => i.Key + 2, i => i.Key);
+        }
+
+        Dictionary<int, int> itemMapping = new Dictionary<int, int>();
+        int index = 2;
+        foreach (var item in filteredItems)
         {
             itemMapping.Add(index, item.Key);
             index++;
         }
-        do
-        {
-            showShopMenu();
-            if (!int.TryParse(Console.ReadLine(), out option))
-            {
-                Console.WriteLine("Invalid option");
-                option = -1;
-                continue;
-            }
-            switch (option)
-            {
-                case 1: // Show shop
-                    try
-                    {
-                        filterMenu();
-                        if (!int.TryParse(Console.ReadLine(), out int filterOption))
-                        {
-                            Console.WriteLine("Invalid option");
-                            filterOption = -1;
-                            continue;
-                        }
-                        List<string> types = new List<string> { "Weapon", "Helmet", "Chestplate", "Boots", "Gloves", "Leggins" };
-                        List<string> modifiers = new List<string> { "MaxHP", "XPreward", "GoldReward", "Heal" };
-                        Console.WriteLine("Items:\n-------------------");
-                        switch (filterOption)
-                        {
-                            case 1: // Show all
-                                try
-                                {
-                                    Dictionary<int, Items> shopItems = _itemsService.GetItems();
-                                    index = 1;
-                                    foreach (var item in shopItems)
-                                    {
-                                        Console.WriteLine($"{index} - {item.Value.Name}");
-                                        index++;
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    Console.WriteLine($"Error retrieving items: {ex.Message}");
-                                    continue;
-                                }
-                                break;
-                            case 2: // Filter by type
-                                try
-                                {
-                                    Console.WriteLine("Enter type to filter\n(Weapon, Helmet, Chestplate, Boots, Gloves, Leggins)");
-                                    string type = Console.ReadLine();
-                                    if (!types.Contains(type))
-                                    {
-                                        throw new ArgumentException("Type not found");
-                                    }
-                                    Dictionary<int, Items> filterItems = _itemsService.filterItemsByType(type);
-                                    foreach (var item in filterItems)
-                                    {
-                                        if (itemMapping.ContainsValue(item.Key))
-                                        {
-                                            int key = itemMapping.FirstOrDefault(i => i.Value == item.Key).Key;
-                                            Console.WriteLine($"{key} - {item.Value.Name}");
-                                        }
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    Console.WriteLine($"Error retrieving items: {ex.Message}");
-                                    continue;
-                                }
-                                break;
-                            case 3: // Filter by stat
-                                try
-                                {
-                                    Console.WriteLine("Enter stat to filter\n(MaxHP, XpReward, GoldReward, Heal)");
-                                    string stat = Console.ReadLine();
-                                    if (!modifiers.Contains(stat))
-                                    {
-                                        throw new ArgumentException("Type not found");
-                                    }
-                                    Dictionary<int, Items> filterItems = _itemsService.filterItemsByStat(stat);
-                                    foreach (var item in filterItems)
-                                    {
-                                        if (itemMapping.ContainsValue(item.Key))
-                                        {
-                                            int key = itemMapping.FirstOrDefault(i => i.Value == item.Key).Key;
-                                            Console.WriteLine($"{key} - {item.Value.Name}");
-                                        }
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    Console.WriteLine($"Error retrieving items: {ex.Message}");
-                                    continue;
-                                }
-                                break;
-                            default:
-                                Console.WriteLine("Invalid option");
-                                break;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error retrieving items: {ex.Message}");
-                        continue;
-                    }
-                    break;
-                case 2: // View item
-                    try
-                    {
-                        Console.WriteLine("Select item to view");
-                        if (!int.TryParse(Console.ReadLine(), out int itemId))
-                        {
-                            Console.WriteLine("Invalid option");
-                        }
-                        int mappedItemId = itemMapping[itemId];
-                        Items item = _itemsService.GetItemById(mappedItemId);
-                        Console.WriteLine(item.ToString());
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error viewing item: {ex.Message}");
-                        continue;
-                    }
-                    break;
-                case 3: // Buy item
-                    try
-                    {
-                        Console.WriteLine("Select item to buy");
-                        if (!int.TryParse(Console.ReadLine(), out int itemId))
-                        {
-                            Console.WriteLine("Invalid option");
-                        }
-                        int mappedItemId = itemMapping[itemId];
-                        Items item = _itemsService.GetItemById(mappedItemId);
-                        _usersService.BuyItem(userDTO.User.Id, item);
-                        Console.WriteLine($"Item bought: {item.Name}");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error buying item: {ex.Message}");
-                        continue;
-                    }
-                    break;
-                default:
-                    Console.WriteLine("Invalid option");
-                    break;
-            }
-        } while (option != 0);
-    }
 
+        return itemMapping;
+    }
 }
