@@ -5,11 +5,13 @@ using AA1.DTOs;
 using System;
 using System.Collections;
 using System.IO;
+using Data;
 
 
 namespace AA1.Presentation;
 public class Menu
 {
+    private readonly Dictionary<string, string> admin = new Dictionary<string, string>();
     private readonly IUsersRepository _usersRepository;
     private readonly IUsersService _usersService;
     private readonly IItemsService _itemsService;
@@ -23,6 +25,7 @@ public class Menu
         _itemsService = itemsService;
         _taskService = taskService;
         _adminMenu = adminMenu;
+        admin.Add(Config.Get("ADMIN_NAME"), Config.Get("ADMIN_PASSWORD"));
     }
 
     private void ShowMainMenu()
@@ -75,8 +78,6 @@ public class Menu
 
     public void MainMenu()
     {
-
-        _adminMenu.ShowAdminMenu();
         int option;
         do
         {
@@ -122,8 +123,16 @@ public class Menu
 
         try
         {
-            LoginResultDTO userDTO = _usersService.Login(name, password);
-            MenuUser(userDTO);
+            if (admin.ContainsKey(name) && admin[name] == password)
+            {
+                _adminMenu.ShowAdminMenu();
+                return;
+            }
+            else
+            {
+                LoginResultDTO userDTO = _usersService.Login(name, password);
+                MenuUser(userDTO);
+            }
         }
         catch (System.Exception ex)
         {
@@ -151,6 +160,10 @@ public class Menu
 
         try
         {
+            if (admin.ContainsKey(name))
+            {
+                throw new Exception("Not allowed to register as 'admin'");
+            }
             LoginResultDTO userDTO = _usersService.Register(name, password);
             MenuUser(userDTO);
         }
