@@ -6,11 +6,13 @@ using System;
 using System.Collections;
 using System.IO;
 using Data;
+using NLog;
 
 
 namespace AA1.Presentation;
 public class Menu
 {
+    private static readonly Logger logger = LogManager.GetCurrentClassLogger();
     private readonly Dictionary<string, string> admin = new Dictionary<string, string>();
     private readonly IUsersRepository _usersRepository;
     private readonly IUsersService _usersService;
@@ -136,6 +138,7 @@ public class Menu
         }
         catch (System.Exception ex)
         {
+            logger.Warn(ex.Message);
             Console.WriteLine(ex.Message);
             MainMenu();
         }
@@ -169,6 +172,7 @@ public class Menu
         }
         catch (System.Exception ex)
         {
+            logger.Warn(ex.Message);
             Console.WriteLine(ex.Message);
             MainMenu();
         }
@@ -241,6 +245,7 @@ public class Menu
                     }
                     catch (Exception ex)
                     {
+                        logger.Warn(ex.Message);
                         Console.WriteLine($"Error retrieving inventory: {ex.Message}");
                     }
                     break;
@@ -257,6 +262,7 @@ public class Menu
                     }
                     catch (Exception ex)
                     {
+                        logger.Warn(ex.Message);
                         Console.WriteLine($"Error equipping item: {ex.Message}");
                     }
                     break;
@@ -272,6 +278,7 @@ public class Menu
                     }
                     catch (Exception ex)
                     {
+                        logger.Warn(ex.Message);
                         Console.WriteLine($"Error unequipping item: {ex.Message}");
                     }
                     break;
@@ -320,6 +327,7 @@ public class Menu
                     }
                     catch (Exception ex)
                     {
+                        logger.Warn(ex.Message);
                         Console.WriteLine($"Error retrieving tasks: {ex.Message}");
                         continue;
                     }
@@ -339,6 +347,7 @@ public class Menu
                     }
                     catch (Exception ex)
                     {
+                        logger.Warn(ex.Message);
                         Console.WriteLine($"Error viewing task: {ex.Message}");
                     }
                     break;
@@ -378,6 +387,7 @@ public class Menu
                     }
                     catch (Exception ex)
                     {
+                        logger.Warn(ex.Message);
                         Console.WriteLine($"Error creating task: {ex.Message}");
                     }
                     break;
@@ -394,6 +404,7 @@ public class Menu
                     }
                     catch (Exception ex)
                     {
+                        logger.Warn(ex.Message);
                         Console.WriteLine($"Error deleting task: {ex.Message}");
                     }
                     break;
@@ -414,6 +425,7 @@ public class Menu
                     }
                     catch (Exception ex)
                     {
+                        logger.Warn(ex.Message);
                         Console.WriteLine($"Error completing task: {ex.Message}");
                     }
                     break;
@@ -474,6 +486,7 @@ public class Menu
                                 }
                                 catch (Exception ex)
                                 {
+                                    logger.Warn(ex.Message);
                                     Console.WriteLine($"Error retrieving items: {ex.Message}");
                                     continue;
                                 }
@@ -499,6 +512,7 @@ public class Menu
                                 }
                                 catch (Exception ex)
                                 {
+                                    logger.Warn(ex.Message);
                                     Console.WriteLine($"Error retrieving items: {ex.Message}");
                                     continue;
                                 }
@@ -524,6 +538,7 @@ public class Menu
                                 }
                                 catch (Exception ex)
                                 {
+                                    logger.Warn(ex.Message);
                                     Console.WriteLine($"Error retrieving items: {ex.Message}");
                                     continue;
                                 }
@@ -535,6 +550,7 @@ public class Menu
                     }
                     catch (Exception ex)
                     {
+                        logger.Warn(ex.Message);
                         Console.WriteLine($"Error retrieving items: {ex.Message}");
                         continue;
                     }
@@ -553,6 +569,7 @@ public class Menu
                     }
                     catch (Exception ex)
                     {
+                        logger.Warn(ex.Message);
                         Console.WriteLine($"Error viewing item: {ex.Message}");
                         continue;
                     }
@@ -572,6 +589,7 @@ public class Menu
                     }
                     catch (Exception ex)
                     {
+                        logger.Warn(ex.Message);
                         Console.WriteLine($"Error buying item: {ex.Message}");
                         continue;
                     }

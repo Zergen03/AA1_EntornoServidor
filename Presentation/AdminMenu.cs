@@ -1,11 +1,14 @@
 using AA1.Models;
 using AA1.Data;
 using AA1.Services;
+using NLog;
 
 namespace AA1.Presentation;
 
 public class AdminMenu
 {
+    private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
     private readonly IUsersRepository _usersRepository;
     private readonly IUsersService _usersService;
     private readonly IItemsService _itemsService;
@@ -81,6 +84,7 @@ public class AdminMenu
                     }
                     catch (System.Exception e)
                     {
+                        logger.Warn(e.Message);
                         Console.WriteLine(e.Message);
                         continue;
                     }
@@ -97,6 +101,7 @@ public class AdminMenu
                     }
                     catch (System.Exception e)
                     {
+                        logger.Warn(e.Message);
                         Console.WriteLine(e.Message);
                     }
                     break;
@@ -119,6 +124,7 @@ public class AdminMenu
                     }
                     catch (System.Exception e)
                     {
+                        logger.Warn(e.Message);
                         Console.WriteLine(e.Message);
                     }
                     break;

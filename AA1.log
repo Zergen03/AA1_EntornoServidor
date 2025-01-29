@@ -4,3 +4,10 @@
 2025-01-29 16:21:38.6401 | WARN | Program | Este es un mensaje de Advertencia. 
 2025-01-29 16:21:38.6401 | ERROR | Program | Este es un mensaje de Error. 
 2025-01-29 16:21:38.6401 | FATAL | Program | Este es un mensaje de Error Crítico. 
+2025-01-29 16:30:43.8625 | TRACE | Program | Este es un mensaje de Trace. 
+2025-01-29 16:30:43.8680 | DEBUG | Program | Este es un mensaje de Debug. 
+2025-01-29 16:30:43.8680 | INFO | Program | Este es un mensaje de Información. 
+2025-01-29 16:30:43.8680 | WARN | Program | Este es un mensaje de Advertencia. 
+2025-01-29 16:30:43.8680 | ERROR | Program | Este es un mensaje de Error. 
+2025-01-29 16:30:43.8680 | FATAL | Program | Este es un mensaje de Error Crítico. 
+2025-01-29 16:31:13.1260 | ERROR | AA1.Presentation.Menu | User or password incorrect 
