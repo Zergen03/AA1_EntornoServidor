@@ -127,6 +127,10 @@ public class UsersService : IUsersService
         {
             throw new System.Exception("Invalid item");
         }
+        if (user.items.ContainsKey(item.Id) || user.equippedItems.ContainsKey(item.Id))
+        {
+            throw new System.Exception("Item already bought");
+        }
         user.gold -= item.Value;
         user.items.Add(item.Id, item.Name);
         _repository.UpdateUser(id, user);
@@ -142,9 +146,9 @@ public class UsersService : IUsersService
                 throw new System.Exception("No items found");
             }
             Dictionary<int, string> _items = new Dictionary<int, string>();
-            for (int i = 0; i < user.items.Count; i++)
+            foreach (var item in user.items)
             {
-                _items.Add(i + 1, user.items[i]);
+                _items.Add(item.Key, item.Value);
             }
             return _items;
         }
@@ -163,9 +167,9 @@ public class UsersService : IUsersService
                 throw new System.Exception("No items found");
             }
             Dictionary<int, string> _items = new Dictionary<int, string>();
-            for (int i = 0; i < user.equippedItems.Count; i++)
+            foreach (var item in user.equippedItems)
             {
-                _items.Add(i + 1, user.equippedItems[i]);
+                _items.Add(item.Key, item.Value);
             }
             return _items;
         }
@@ -198,7 +202,7 @@ public class UsersService : IUsersService
         try
         {
             Users user = _repository.GetUserById(id);
-            if (!user.items.ContainsKey(itemId))
+            if (!user.equippedItems.ContainsKey(itemId))
             {
                 throw new System.Exception("Item not found");
             }

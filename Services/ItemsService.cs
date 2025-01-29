@@ -85,7 +85,7 @@ public class ItemsService : IItemsService
         Dictionary<int, Items> items = new Dictionary<int, Items>();
         foreach (Items item in _itemsRepository.GetItems())
         {
-            if (item.Stats.ContainsKey(stat))
+            if (item.Stats[stat] > 0)
             {
                 items.Add(item.Id, item);
             }
