@@ -163,7 +163,6 @@ public class Menu
     }
 
 
-
     private void Register()
     {
         AnsiConsole.Clear();
@@ -198,8 +197,6 @@ public class Menu
             MainMenu();
         }
     }
-
-
     private void MenuUser(LoginResultDTO userDTO)
     {
         int option;
@@ -254,8 +251,6 @@ public class Menu
 
         } while (option != 0);
     }
-
-
     private void InventoryMenu(LoginResultDTO userDTO)
     {
         while (true)
@@ -379,13 +374,6 @@ public class Menu
             }
         }
     }
-
-
-
-
-
-
-
     private void TaskMenu(LoginResultDTO userDTO)
     {
         int option;
@@ -659,161 +647,4 @@ public class Menu
 
         return itemMapping;
     }
-
-
-
-    //     do
-    //     {
-    //         showShopMenu();
-    //         if (!int.TryParse(Console.ReadLine(), out option))
-    //         {
-    //             Console.WriteLine("Invalid option");
-    //             option = -1;
-    //             continue;
-    //         }
-    //         switch (option)
-    //         {
-    //             case 1: // Show shop
-    //                 try
-    //                 {
-    //                     filterMenu();
-    //                     if (!int.TryParse(Console.ReadLine(), out int filterOption))
-    //                     {
-    //                         Console.WriteLine("Invalid option");
-    //                         filterOption = -1;
-    //                         continue;
-    //                     }
-    //                     List<string> types = new List<string> { "Weapon", "Helmet", "Chestplate", "Boots", "Gloves", "Leggins" };
-    //                     List<string> modifiers = new List<string> { "MaxHP", "XPreward", "GoldReward", "Heal" };
-    //                     Console.WriteLine("Items:\n-------------------");
-    //                     switch (filterOption)
-    //                     {
-    //                         case 1: // Show all
-    //                             try
-    //                             {
-    //                                 Dictionary<int, Items> shopItems = _itemsService.GetItems();
-    //                                 index = 1;
-    //                                 foreach (var item in shopItems)
-    //                                 {
-    //                                     Console.WriteLine($"{index} - {item.Value.Name}");
-    //                                     index++;
-    //                                 }
-    //                             }
-    //                             catch (Exception ex)
-    //                             {
-    //                                 logger.Warn(ex.Message);
-    //                                 Console.WriteLine($"Error retrieving items: {ex.Message}");
-    //                                 continue;
-    //                             }
-    //                             break;
-    //                         case 2: // Filter by type
-    //                             try
-    //                             {
-    //                                 Console.WriteLine("Enter type to filter\n(Weapon, Helmet, Chestplate, Boots, Gloves, Leggins)");
-    //                                 string type = Console.ReadLine();
-    //                                 if (!types.Contains(type))
-    //                                 {
-    //                                     throw new ArgumentException("Type not found");
-    //                                 }
-    //                                 Dictionary<int, Items> filterItems = _itemsService.filterItemsByType(type);
-    //                                 foreach (var item in filterItems)
-    //                                 {
-    //                                     if (itemMapping.ContainsValue(item.Key))
-    //                                     {
-    //                                         int key = itemMapping.FirstOrDefault(i => i.Value == item.Key).Key;
-    //                                         Console.WriteLine($"{key} - {item.Value.Name}");
-    //                                     }
-    //                                 }
-    //                             }
-    //                             catch (Exception ex)
-    //                             {
-    //                                 logger.Warn(ex.Message);
-    //                                 Console.WriteLine($"Error retrieving items: {ex.Message}");
-    //                                 continue;
-    //                             }
-    //                             break;
-    //                         case 3: // Filter by stat
-    //                             try
-    //                             {
-    //                                 Console.WriteLine("Enter stat to filter\n(MaxHP, XpReward, GoldReward, Heal)");
-    //                                 string stat = Console.ReadLine();
-    //                                 if (!modifiers.Contains(stat))
-    //                                 {
-    //                                     throw new ArgumentException("Type not found");
-    //                                 }
-    //                                 Dictionary<int, Items> filterItems = _itemsService.filterItemsByStat(stat);
-    //                                 foreach (var item in filterItems)
-    //                                 {
-    //                                     if (itemMapping.ContainsValue(item.Key))
-    //                                     {
-    //                                         int key = itemMapping.FirstOrDefault(i => i.Value == item.Key).Key;
-    //                                         Console.WriteLine($"{key} - {item.Value.Name}");
-    //                                     }
-    //                                 }
-    //                             }
-    //                             catch (Exception ex)
-    //                             {
-    //                                 logger.Warn(ex.Message);
-    //                                 Console.WriteLine($"Error retrieving items: {ex.Message}");
-    //                                 continue;
-    //                             }
-    //                             break;
-    //                         default:
-    //                             Console.WriteLine("Invalid option");
-    //                             break;
-    //                     }
-    //                 }
-    //                 catch (Exception ex)
-    //                 {
-    //                     logger.Warn(ex.Message);
-    //                     Console.WriteLine($"Error retrieving items: {ex.Message}");
-    //                     continue;
-    //                 }
-    //                 break;
-    //             case 2: // View item
-    //                 try
-    //                 {
-    //                     Console.WriteLine("Select item to view");
-    //                     if (!int.TryParse(Console.ReadLine(), out int itemId))
-    //                     {
-    //                         Console.WriteLine("Invalid option");
-    //                     }
-    //                     int mappedItemId = itemMapping[itemId];
-    //                     Items item = _itemsService.GetItemById(mappedItemId);
-    //                     Console.WriteLine(item.ToString());
-    //                 }
-    //                 catch (Exception ex)
-    //                 {
-    //                     logger.Warn(ex.Message);
-    //                     Console.WriteLine($"Error viewing item: {ex.Message}");
-    //                     continue;
-    //                 }
-    //                 break;
-    //             case 3: // Buy item
-    //                 try
-    //                 {
-    //                     Console.WriteLine("Select item to buy");
-    //                     if (!int.TryParse(Console.ReadLine(), out int itemId))
-    //                     {
-    //                         Console.WriteLine("Invalid option");
-    //                     }
-    //                     int mappedItemId = itemMapping[itemId];
-    //                     Items item = _itemsService.GetItemById(mappedItemId);
-    //                     _usersService.BuyItem(userDTO.User.Id, item);
-    //                     Console.WriteLine($"Item bought: {item.Name}");
-    //                 }
-    //                 catch (Exception ex)
-    //                 {
-    //                     logger.Warn(ex.Message);
-    //                     Console.WriteLine($"Error buying item: {ex.Message}");
-    //                     continue;
-    //                 }
-    //                 break;
-    //             default:
-    //                 Console.WriteLine("Invalid option");
-    //                 break;
-    //         }
-    //     } while (option != 0);
-
-
 }

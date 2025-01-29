@@ -3,3 +3,4 @@ obj/
 ddbb/*
 !ddbb/.gitkeep
 .env
+AA1.log
