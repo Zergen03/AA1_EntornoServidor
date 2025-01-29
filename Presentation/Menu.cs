@@ -14,12 +14,13 @@ public class Menu
     private readonly ITaskService _taskService;
     private readonly AdminMenu _adminMenu;
 
-    public Menu(IUsersRepository usersRepository, IUsersService usersService, IItemsService itemsService, ITaskService taskService)
+    public Menu(IUsersRepository usersRepository, IUsersService usersService, IItemsService itemsService, ITaskService taskService, AdminMenu adminMenu)
     {
         _usersRepository = usersRepository;
         _usersService = usersService;
         _itemsService = itemsService;
         _taskService = taskService;
+        _adminMenu = adminMenu;
     }
 
     private void ShowMainMenu()
@@ -73,7 +74,7 @@ public class Menu
     public void MainMenu()
     {
         
-        // _adminMenu.ShowMenu();
+        _adminMenu.ShowAdminMenu();
         int option;
         do
         {
@@ -453,6 +454,7 @@ public class Menu
                                     foreach (var item in shopItems)
                                     {
                                         Console.WriteLine($"{index} - {item.Value.Name}");
+                                        index++;
                                     }
                                 }
                                 catch (Exception ex)
@@ -548,7 +550,8 @@ public class Menu
                         {
                             Console.WriteLine("Invalid option");
                         }
-                        Items item = _itemsService.GetItemById(itemId);
+                        int mappedItemId = itemMapping[itemId];
+                        Items item = _itemsService.GetItemById(mappedItemId);
                         _usersService.BuyItem(userDTO.User.Id, item);
                         Console.WriteLine($"Item bought: {item.Name}");
                     }

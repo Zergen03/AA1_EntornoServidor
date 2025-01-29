@@ -22,8 +22,6 @@ var Menu = serviceProvider.GetService<Menu>();
 var AdminMenu = serviceProvider.GetService<AdminMenu>();
 
 Menu.MainMenu();
-AdminMenu.ShowAdminMenu();
-
 
 // try{
 //     if(UsersService != null){
