@@ -19,6 +19,12 @@ public class Items{
         IncraseSeed();
     }
 
+    public Items()
+    {
+        Id = _seed;
+        IncraseSeed();
+    }
+
     private static void IncraseSeed()
     {
         _seed++;
@@ -38,6 +44,11 @@ public class Items{
 
     public override string ToString()
     {
-        return $"Name: {Name},\nValue: {Value},\nStats: {Stats}";   
+        string statsList = "";
+        foreach (var stat in Stats)
+        {
+            statsList += $"{stat.Key}: {stat.Value}\n";
+        }
+        return $"Name: {Name},\nValue: {Value},\nType: {Type},\nStats:\n{statsList}";   
     }
 }

@@ -6,7 +6,8 @@ public interface IUsersRepository
 {
     List<Users> GetUsers();
     Users GetUserById(int id);
-    Users CreateUser(string name);
+    Users GetUserByName(string name);
+    Users CreateUser(Users user);
     Users UpdateUser(int id, Users user);
     Users DeleteUser(int id);
     void LoadUsers();
