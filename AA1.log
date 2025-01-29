@@ -1,0 +1,6 @@
+2025-01-29 16:21:38.6401 | TRACE | Program | Este es un mensaje de Trace. 
+2025-01-29 16:21:38.6401 | DEBUG | Program | Este es un mensaje de Debug. 
+2025-01-29 16:21:38.6401 | INFO | Program | Este es un mensaje de Información. 
+2025-01-29 16:21:38.6401 | WARN | Program | Este es un mensaje de Advertencia. 
+2025-01-29 16:21:38.6401 | ERROR | Program | Este es un mensaje de Error. 
+2025-01-29 16:21:38.6401 | FATAL | Program | Este es un mensaje de Error Crítico. 
